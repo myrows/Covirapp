@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.covirapp.service
 
-import com.salesianostriana.dam.covirapp.entities.Permission
+import com.salesianostriana.dam.covirapp.domain.Permission
 import java.util.*
 
 interface PermissionService {

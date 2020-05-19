@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.covirapp.entities
+package com.salesianostriana.dam.covirapp.domain
 
 enum class Status {
     SALUDABLE, INFECTADO, ASINTOMATICO, RECUPERADO

@@ -31,14 +31,9 @@ class WebSecurityConfiguration(
     override fun configure(http: HttpSecurity) {
         // @formatter:off
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.POST,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.PUT,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.DELETE,"/covirapp/**").hasRole("ROLE_USER")
-                .anyRequest().hasRole("ROLE_ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
         // @formatter:on
     }
 

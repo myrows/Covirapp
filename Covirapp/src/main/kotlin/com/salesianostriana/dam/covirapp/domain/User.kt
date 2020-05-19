@@ -1,22 +1,16 @@
-package com.salesianostriana.dam.covirapp.entities
+package com.salesianostriana.dam.covirapp.domain
 
 import com.salesianostriana.dam.covirapp.annotation.NoArg
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.io.Serializable
-import java.util.*
 import javax.persistence.*
-import kotlin.collections.HashSet
+import com.fasterxml.jackson.annotation.JsonManagedReference
 
 @Entity
 @NoArg
 @Table(name = "\"user\"")
 data class User(
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val id: Long = 0,
-
         @Column(nullable = false, unique = true)
         private var username: String,
 
@@ -31,10 +25,7 @@ data class User(
 
         @Column(name = "status")
         @Enumerated(EnumType.STRING)
-        var status : Status,
-
-        @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL])
-        var quiz : Quiz? = null,
+        var status : Status? = null,
 
         @ManyToMany
         @JoinTable(
@@ -43,6 +34,10 @@ data class User(
                 inverseJoinColumns = [JoinColumn(name = "role_id")]
         )
         val roles: Set<Role> = HashSet(),
+
+        @JsonManagedReference
+        @OneToMany( mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE] )
+        var quizs : List<Quiz>? = null,
 
         @Transient
         private var authorities: MutableCollection<out GrantedAuthority> = HashSet(),
@@ -54,7 +49,11 @@ data class User(
         @Column(nullable = false)
         private val enabled: Boolean = true,
         @Column(name = "credentials_non_expired", nullable = false)
-        private val credentialsNonExpired: Boolean = true
+        private val credentialsNonExpired: Boolean = true,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long? = 0
+
 ) : UserDetails, Serializable {
     override fun getUsername() = username
     override fun getPassword() = password

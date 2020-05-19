@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.covirapp.entities
+package com.salesianostriana.dam.covirapp.domain
 
 import com.salesianostriana.dam.covirapp.annotation.NoArg
 import java.io.Serializable

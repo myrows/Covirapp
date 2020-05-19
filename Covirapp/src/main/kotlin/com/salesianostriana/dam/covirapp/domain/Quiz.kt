@@ -1,14 +1,13 @@
-package com.salesianostriana.dam.covirapp.entities
+package com.salesianostriana.dam.covirapp.domain
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.salesianostriana.dam.covirapp.annotation.NoArg
 import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
-import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -41,6 +40,8 @@ data class Quiz (
         @Column( name = "risk_person" )
         var riskPerson : Boolean,
 
+        @JsonBackReference @ManyToOne var user : User? = null,
+
         @Column( name = "created_date", nullable = false, updatable = false )
         @CreatedDate
         @JsonFormat( shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" ) @DateTimeFormat(style = "yyyy-MM-dd") var timeCreated : LocalDate? = null,
@@ -49,12 +50,9 @@ data class Quiz (
         @LastModifiedDate
         @JsonFormat( shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" ) @DateTimeFormat(style = "yyyy-MM-dd") var lastUpdated : LocalDate? = null,
 
-        @OneToOne
-        @MapsId
-        var user : User? = null,
-
-        @Column( name = "id" )
-        @Id @GeneratedValue val id : UUID? = null
+        @javax.persistence.Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long? = 0
 
 
 
