@@ -66,6 +66,7 @@ data class CreateUserDTO(
         var username: String,
         var fullName: String,
         var province: String,
+        var status: Status? = null,
         val password: String,
         val password2: String
 )

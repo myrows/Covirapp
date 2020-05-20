@@ -40,7 +40,7 @@ data class User(
         var quizs : List<Quiz>? = null,
 
         @Transient
-        private var authorities: MutableCollection<out GrantedAuthority> = HashSet(),
+        private var authorities: MutableCollection<out GrantedAuthority>? = HashSet(),
 
         @Column(name = "non_expired", nullable = false)
         private val nonExpired: Boolean = true,
@@ -61,7 +61,7 @@ data class User(
     override fun isAccountNonLocked() = nonLocked
     override fun isEnabled() = enabled
     override fun isCredentialsNonExpired() = credentialsNonExpired
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = authorities
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>? = authorities
 
     override fun hashCode(): Int {
         if (id == 0L) {
