@@ -23,6 +23,9 @@ data class User(
         @Column(name = "province")
         var province : String,
 
+        @Column(name = "avatar")
+        var avatar : String? = null,
+
         @Column(name = "status")
         @Enumerated(EnumType.STRING)
         var status : Status? = null,

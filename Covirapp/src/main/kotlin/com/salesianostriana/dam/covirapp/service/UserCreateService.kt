@@ -13,22 +13,23 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @Service
 class UserCreateService(
         private val userRepository: UserRepository,
-        private val encoder: PasswordEncoder
+        private val encoder: PasswordEncoder,
+        val fileStorage: FileStorage
 ) {
 
-    fun create(newUser: CreateUserDTO, role : Role): Optional<User> {
-        if (userRepository.findByUsername(newUser.username).isPresent)
+    fun create(username : String, password : String, fullName : String, province : String, file : MultipartFile?, role : Role): Optional<User> {
+        fileStorage.store(file)
+
+        if (userRepository.findByUsername(username).isPresent)
             return Optional.empty()
         return Optional.of(
-                with(newUser) {
-                    userRepository.save(User( username = username, password = encoder.encode(password), fullName = fullName, province = province, roles = hashSetOf(role)))
-                }
-
+                    userRepository.save(User( username = username, password = encoder.encode(password), fullName = fullName, province = province, avatar = file?.originalFilename, roles = hashSetOf(role)))
         )
     }
 

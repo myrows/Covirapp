@@ -5,21 +5,26 @@ import com.salesianostriana.dam.covirapp.domain.Status
 import com.salesianostriana.dam.covirapp.domain.User
 import com.salesianostriana.dam.covirapp.repository.QuizRepository
 import com.salesianostriana.dam.covirapp.repository.UserRepository
+import com.salesianostriana.dam.covirapp.service.FileStorage
 import com.salesianostriana.dam.covirapp.service.RoleService
 import com.salesianostriana.dam.covirapp.service.UserCreateService
 import org.apache.coyote.Response
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @RestController
 @RequestMapping("/covirapp")
 class UserController ( val userRepository: UserRepository, val quizRepository: QuizRepository, val userService : UserCreateService,
-    val roleService : RoleService, val encoder: PasswordEncoder) {
+    val roleService : RoleService, val encoder: PasswordEncoder, val fileStorage: FileStorage) {
 
     @GetMapping("/quiz")
     fun findAllQuiz() = quizRepository.findAll().map { it.toQuizDTO() }
@@ -53,10 +58,22 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
         return user.toUserDTO()
     }
 
+    @GetMapping("/user/me/avatar/{id}")
+    fun getUserAvatar ( @PathVariable id : Long ) : ResponseEntity<Resource>{
+      var userFound : User = userRepository.findById( id ).get()
+        val file = fileStorage.loadFile(userFound.avatar)
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"")
+                .body(file)
+    }
+
     @PostMapping("/user")
-    fun createUser( @RequestBody newUser : CreateUserDTO ) : ResponseEntity<UserDTO> =
-            userService.create(newUser, roleService.findByName("ROLE_USER").get()).map { ResponseEntity.status(HttpStatus.CREATED).body(it.toUserDTO()) }.orElseThrow {
-                ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de  usuario ${newUser.username} ya existe")
+    fun createUserWithAvatar( @RequestParam("username") username : String, @RequestParam("password") password : String,
+                              @RequestParam("fullName") fullName : String, @RequestParam("province") province : String,
+                              @RequestParam("uploadfile") file: MultipartFile) : ResponseEntity<UserDTO> =
+            userService.create(username, password, fullName, province, file, roleService.findByName("ROLE_USER").get()).map { ResponseEntity.status(HttpStatus.CREATED).body(it.toUserDTO()) }.orElseThrow {
+                ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de  usuario $username ya existe")
             }
 
     @PutMapping("/user/{id}")
@@ -78,6 +95,21 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     fun deleteAccount( @PathVariable id : Long ) : ResponseEntity<Void> {
         userRepository.deleteById( id )
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/files/{filename}")
+    fun downloadFile(@PathVariable filename: String): ResponseEntity<Resource> {
+        val file = fileStorage.loadFile(filename)
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.filename + "\"")
+                .body(file)
+    }
+
+    @PostMapping("/upload")
+    fun uploadMultipartFile(@RequestParam("uploadfile") file: MultipartFile, model: Model): String {
+        fileStorage.store(file)
+        model.addAttribute("message", "File uploaded successfully! -> filename = " + file.originalFilename)
+        return file.originalFilename!!
     }
 
 }
