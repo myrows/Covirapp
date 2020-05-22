@@ -56,11 +56,12 @@ data class UserDTO(
         var password : String,
         var fullName : String,
         var province : String,
+        var avatar : String? = null,
         var status : Status?,
         val id : Long? = null
 )
 
-fun User.toUserDTO() = UserDTO( username, password, fullName, province, status, id )
+fun User.toUserDTO() = UserDTO( username, password, fullName, province, avatar, status, id )
 
 data class CreateUserDTO(
         var username: String,

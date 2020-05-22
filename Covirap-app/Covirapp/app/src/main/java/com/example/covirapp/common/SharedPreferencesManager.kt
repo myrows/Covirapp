@@ -2,7 +2,7 @@ package com.example.covirapp.common
 
 import android.content.Context
 import android.content.SharedPreferences
-import java.util.*
+import com.example.covirapp.di.MyApplication
 
 
 class SharedPreferencesManager {
@@ -12,7 +12,7 @@ class SharedPreferencesManager {
 
         private val sharedPreferences: SharedPreferences
 
-            private get() = MyApp.instance.getSharedPreferences(
+            private get() = MyApplication.instance.getSharedPreferences(
                 APP_SETTINGS_FILE,
                 Context.MODE_PRIVATE
             )

@@ -12,9 +12,8 @@ import com.example.covirapp.MainActivity
 import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
-import com.example.covirapp.common.MyApp
 import com.example.covirapp.common.SharedPreferencesManager
-import com.example.covirapp.models.Login
+import com.example.covirapp.di.MyApplication
 import com.example.covirapp.response.LoginResponse
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
@@ -46,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
             if ( active ) {
                 if (!edtEmail.text.toString().isEmpty() && !edtPassword?.text.toString().isEmpty()){
                     if(token == null){
+
                         service = serviceGenerator.createServiceLogin(CovirappService::class.java)
 
                         var call : Call<LoginResponse> = service.login("password", edtEmail.text.toString(), edtPassword?.text.toString())
@@ -57,15 +57,15 @@ class LoginActivity : AppCompatActivity() {
                                 if ( response.isSuccessful ) {
                                     var intent : Intent = Intent(this@LoginActivity, MainActivity::class.java)
                                     startActivity(intent)
-                                    Toast.makeText(MyApp.instance, "Ha iniciado sesión con éxito", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(MyApplication.instance, "Ha iniciado sesión con éxito", Toast.LENGTH_LONG).show()
 
                                     SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("tokenId", response.body()!!.access_token);
                                 } else {
-                                    Toast.makeText(MyApp.instance, "Email y/o contraseña incorrecta", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(MyApplication.instance, "Email y/o contraseña incorrecta", Toast.LENGTH_LONG).show()
                                 }
                             }
                             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                                Toast.makeText(MyApp.instance, "Error de conexión", Toast.LENGTH_LONG)
+                                Toast.makeText(MyApplication.instance, "Error de conexión", Toast.LENGTH_LONG)
                             }
                         })
                     }else{

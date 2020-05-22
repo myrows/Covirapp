@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.covirapp.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="com.example.covirapp.ui.users.UserResponseItemFragment"
+        android:label="Users"
+        tools:layout="@layout/fragment_user_response_item_list" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

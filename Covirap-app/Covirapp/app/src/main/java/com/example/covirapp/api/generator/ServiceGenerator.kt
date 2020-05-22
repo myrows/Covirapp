@@ -76,7 +76,7 @@ class ServiceGenerator {
         return retrofit!!.create(serviceClass)
     }
 
-    fun <S> createServiceNota(serviceClass: Class<S>?): S {
+    fun <S> createServiceUser(serviceClass: Class<S>?): S {
         val tokenUserLogged = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("tokenId")
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(object : Interceptor {

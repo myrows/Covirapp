@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+//TODO hay que aplicar la siguiente línea
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -38,8 +40,9 @@ android {
 }
 
 dependencies {
-    def okhttpVersion = '4.6.0'
+    def okhttpVersion = '4.5.0'
     def retrofitVersion = '2.8.1'
+    def lottieVersion = '3.4.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -51,6 +54,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -70,4 +75,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.1'
     //Gráficas
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.27'
+    kapt 'com.google.dagger:dagger-compiler:2.27'
+    // Lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }
