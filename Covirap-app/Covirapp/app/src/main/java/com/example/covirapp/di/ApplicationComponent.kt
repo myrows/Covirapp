@@ -3,6 +3,7 @@ package com.example.covirapp.di
 import android.app.Application
 import com.example.covirapp.api.generator.NetworkModule
 import com.example.covirapp.common.SharedPreferencesModule
+import com.example.covirapp.ui.graphics.PaisesResponseItemFragment
 import com.example.covirapp.ui.users.UserResponseItemFragment
 import dagger.Component
 import javax.inject.Singleton
@@ -10,7 +11,8 @@ import javax.inject.Singleton
 @Singleton
 @Component( modules = [ NetworkModule::class, SharedPreferencesModule::class ] )
 interface ApplicationComponent {
-    fun inject(userListFragment : UserResponseItemFragment)
+    fun inject(userListFragment: UserResponseItemFragment)
+    fun inject(countryListFragment: PaisesResponseItemFragment)
 }
 
 class MyApplication: Application() {

@@ -1,4 +1,4 @@
-package com.example.covirapp.ui.users
+package com.example.covirapp.ui.graphics
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,20 +11,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.airbnb.lottie.LottieAnimationView
 import com.example.covirapp.R
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
+import com.example.covirapp.viewmodel.CovirappCountryViewModel
 import com.example.covirapp.viewmodel.CovirappViewModel
 import javax.inject.Inject
 
-class UserResponseItemFragment : Fragment() {
-    @Inject lateinit var userViewModel: CovirappViewModel
+class PaisesResponseItemFragment : Fragment() {
+    @Inject lateinit var countryViewModel: CovirappCountryViewModel
     @Inject lateinit var sharedPref : SharedPreferences
 
-    private lateinit var paginationProgressBar : LottieAnimationView
-    private lateinit var userAdapter: MyUserResponseItemRecyclerViewAdapter
-    private var columnCount = 2
+    private lateinit var countryAdapter: MyPaisesResponseItemRecyclerViewAdapter
+    private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,48 +35,38 @@ class UserResponseItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_user_response_item_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_paises_response_item_list, container, false)
 
-        userAdapter = MyUserResponseItemRecyclerViewAdapter()
+        countryAdapter = MyPaisesResponseItemRecyclerViewAdapter()
 
         // Set the adapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.listRecycler)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerCountry)
 
-            with(recyclerView) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = userAdapter
+        with(recyclerView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
-
+            adapter = countryAdapter
+        }
         //Observer para usuarios
-        userViewModel.users.observe(viewLifecycleOwner, Observer { response ->
+        countryViewModel.countries.observe(viewLifecycleOwner, Observer { response ->
             when( response ) {
                 is Resource.Success -> {
-                    hideProgressBar()
                     response.data.let {
-                        userAdapter.setData( it )
+                        countryAdapter.setData( it )
                         recyclerView.scheduleLayoutAnimation()
                     }
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
                     response.message.let {
                         Toast.makeText(MyApplication.instance, "Ha ocurrido un error", Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {
-                    showProgressBar()
                 }
             }
         })
         return view
-    }
-
-    private fun showProgressBar() {
-    }
-
-    private fun hideProgressBar() {
     }
 }

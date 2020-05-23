@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.covirapp.common.Resource
+import com.example.covirapp.models.PaisesResponse
 import com.example.covirapp.models.UsersResponse
 import com.example.covirapp.repository.CovirappRepository
 import kotlinx.coroutines.delay
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
-class UsersViewModel @Inject constructor(
+class CovirappViewModel @Inject constructor(
     private val covirappRepository: CovirappRepository
 ) : ViewModel() {
 
