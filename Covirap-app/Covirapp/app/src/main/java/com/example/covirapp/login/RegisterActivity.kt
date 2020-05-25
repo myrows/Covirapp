@@ -3,20 +3,25 @@ package com.example.covirapp.login
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.MediaStore.MediaColumns
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
+import kotlinx.android.synthetic.main.activity_register.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -24,7 +29,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.*
+import java.io.File
+import java.net.URI
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -37,11 +43,12 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var btnRegister : Button
     lateinit var edtName : EditText
     lateinit var edtFullName : EditText
-    lateinit var edtProvince : EditText
     lateinit var edtPassword : EditText
     var uriSelected : Uri? = null
     lateinit var originalFileName : String
     lateinit var imgRegister : ImageView
+    lateinit var file : File
+    lateinit var provinceSelected : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +58,6 @@ class RegisterActivity : AppCompatActivity() {
         btnRegister = findViewById(R.id.buttonRegister)
         edtName = findViewById(R.id.editTextUsernameR)
         edtFullName = findViewById(R.id.editFullName)
-        edtProvince = findViewById(R.id.editProvince)
         edtPassword = findViewById(R.id.editPassword)
         imgRegister = findViewById(R.id.imageViewRegister)
         var generator = ServiceGenerator()
@@ -59,30 +65,36 @@ class RegisterActivity : AppCompatActivity() {
 
         uriSelected = null
 
+        ArrayAdapter.createFromResource(this, R.array.provinces, android.R.layout.simple_spinner_item).also { arrayAdapter ->
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerProvince.adapter = arrayAdapter
+        }
+
+        spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                provinceSelected = parent?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
         textIniciarSesion.setOnClickListener {
             var intent : Intent = Intent( this@RegisterActivity, LoginActivity::class.java )
             startActivity(intent)
         }
 
         btnRegister.setOnClickListener {
-            if ( !edtName.text.toString().isEmpty() && !edtFullName.text.toString().isEmpty() && !edtProvince.text.toString().isEmpty()
+            if ( !edtName.text.toString().isEmpty() && !edtFullName.text.toString().isEmpty() && !provinceSelected.isEmpty()
                 && !edtPassword.text.toString().isEmpty()) {
                 if (uriSelected != null) {
-                    try {
-                        val inputStream: InputStream? =
-                            contentResolver.openInputStream(uriSelected!!)
-                        val baos = ByteArrayOutputStream()
-                        val bufferedInputStream =
-                            BufferedInputStream(inputStream)
-                        var cantBytes: Int
-                        val buffer = ByteArray(1024 * 4)
-                        cantBytes = bufferedInputStream.read(buffer, 0 , 1024 * 4)
 
-                        while ( cantBytes != -1 ) {
-                            baos.write(buffer, 0, cantBytes)
-                        }
-
-                        val requestFile: RequestBody = RequestBody.create(getContentResolver().getType(uriSelected!!)?.toMediaTypeOrNull(), baos.toByteArray())
+                        val requestFile: RequestBody = RequestBody.create(getContentResolver().getType(uriSelected!!)?.toMediaTypeOrNull(), file)
 
                         val body: MultipartBody.Part = MultipartBody.Part.createFormData("uploadfile", originalFileName, requestFile)
 
@@ -90,7 +102,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         val fullName: RequestBody = RequestBody.create(MultipartBody.FORM, edtFullName.getText().toString())
 
-                        val province: RequestBody = RequestBody.create(MultipartBody.FORM, edtProvince.getText().toString())
+                        val province: RequestBody = RequestBody.create(MultipartBody.FORM, provinceSelected)
 
                         val password: RequestBody = RequestBody.create(MultipartBody.FORM, edtPassword.getText().toString())
 
@@ -124,11 +136,6 @@ class RegisterActivity : AppCompatActivity() {
                                 ).show()
                             }
                         })
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
                 } else if (uriSelected == null) {
                     Toast.makeText(this@RegisterActivity, "No has elegido avatar, sácate una foto 😁" , Toast.LENGTH_SHORT).show()
                 }
@@ -163,8 +170,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE) // GIVE AN INTEGER VALUE FOR IMAGE_PICK_CODE LIKE 1000
     }
@@ -177,8 +184,15 @@ class RegisterActivity : AppCompatActivity() {
                 uri = data.data
                 originalFileName = getFileName(uri!!)!!
 
+                file =File ( getPath( uri ) )
+
+                Log.d("FILE", "$file")
+
                 // Show user avatar selected from gallery
-                imgRegister.load( uri )
+                imgRegister.load( uri ) {
+                    transformations(CircleCropTransformation())
+
+                }
 
                 uriSelected = uri
             }
@@ -205,5 +219,29 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
         return result
+    }
+
+    // Obtiene la ruta absoluta del file
+    fun getPath(uri: Uri?): String? {
+        val projection =
+            arrayOf(MediaStore.Images.Media.DATA)
+        val cursor =
+            contentResolver.query(uri!!, projection, null, null, null)
+                ?: return null
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val s = cursor.getString(column_index)
+        cursor.close()
+        return s
+    }
+
+    fun getAbsolutePath(uri: Uri?): String? {
+        val projection = arrayOf(MediaColumns.DATA)
+        val cursor = managedQuery(uri, projection, null, null, null)
+        return if (cursor != null) {
+            val column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA)
+            cursor.moveToFirst()
+            cursor.getString(column_index)
+        } else null
     }
 }

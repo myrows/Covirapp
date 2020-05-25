@@ -8,4 +8,6 @@ import javax.inject.Singleton
 class CovirappRepository @Inject constructor( var covirappService: CovirappService) {
 
     suspend fun getUsers() = covirappService.getAllUsers()
+    suspend fun getUsersProvince() = covirappService.getUsersByOwnProvince()
+
 }

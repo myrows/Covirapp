@@ -6,28 +6,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.covirapp.api.CovirappCountryService
 import com.example.covirapp.common.Resource
-import com.example.covirapp.models.PaisesResponse
+import com.example.covirapp.models.UsersResponse
+import com.example.covirapp.repository.CovirappCountryRepository
+import com.example.covirapp.repository.CovirappRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 class CovirappCountryViewModel @Inject constructor(
-    private val covirappRepository: CovirappCountryService
+    private val covirappRepository: CovirappCountryRepository
 ) : ViewModel() {
 
-    var countries : MutableLiveData<Resource<PaisesResponse>> = MutableLiveData()
+    /*var countriesApi : MutableLiveData<Resource<PaisesResponse>> = MutableLiveData()
 
     init {
-        getCountries()
+        getCountriesApi()
         Log.i("MOVIES", "theMovieDBRepository en MovieViewModel: $covirappRepository")
     }
 
-    fun getCountries() = viewModelScope.launch {
-        countries.value = Resource.Loading()
-        delay(3000)
-        val response = covirappRepository.getAllCountries()
-        countries.value = handleCountriesCovirapp( response )
+    fun getCountriesApi() = viewModelScope.launch {
+        countriesApi.value = Resource.Loading()
+        delay(2000)
+        val response = covirappRepository.getCountries()
+        countriesApi.value = handleCountriesCovirapp( response )
     }
 
     private fun handleCountriesCovirapp ( response: Response<PaisesResponse> ) : Resource<PaisesResponse> {
@@ -37,5 +39,5 @@ class CovirappCountryViewModel @Inject constructor(
             }
         }
         return Resource.Error(response.message())
-    }
+    }*/
 }

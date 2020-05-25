@@ -30,7 +30,7 @@
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardViewR2">
+            app:layout_constraintTop_toBottomOf="@+id/cardViewR">
 
             <EditText
                 android:id="@+id/editPassword"
@@ -94,28 +94,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewR2"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="32dp"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintEnd_toEndOf="@+id/cardViewR"
-            app:layout_constraintStart_toStartOf="@+id/cardViewR"
-            app:layout_constraintTop_toBottomOf="@+id/cardViewR">
-
-            <EditText
-                android:id="@+id/editProvince"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:ems="10"
-                android:gravity="center"
-                android:hint="Provincia"
-                android:inputType="textPersonName" />
-
-        </androidx.cardview.widget.CardView>
-
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="0dp"
@@ -124,9 +102,9 @@
             android:background="@drawable/custom_button"
             android:text="Registrarse"
             android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="@+id/cardViewR2"
-            app:layout_constraintStart_toStartOf="@+id/cardViewR2"
-            app:layout_constraintTop_toBottomOf="@+id/cardViewR4" />
+            app:layout_constraintEnd_toEndOf="@+id/spinnerProvince"
+            app:layout_constraintStart_toStartOf="@+id/spinnerProvince"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerProvince" />
 
         <TextView
             android:id="@+id/textViewTecnico"
@@ -161,6 +139,15 @@
             app:layout_constraintEnd_toEndOf="@+id/imageCircle"
             app:layout_constraintStart_toStartOf="@+id/imageCircle"
             app:layout_constraintTop_toTopOf="@+id/imageCircle" />
+
+        <Spinner
+            android:id="@+id/spinnerProvince"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="@+id/cardViewR4"
+            app:layout_constraintStart_toStartOf="@+id/cardViewR4"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewR4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

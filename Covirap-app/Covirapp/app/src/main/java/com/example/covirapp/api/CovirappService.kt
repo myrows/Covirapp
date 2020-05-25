@@ -1,13 +1,14 @@
 package com.example.covirapp.api
 
 import com.example.covirapp.models.Login
-import com.example.covirapp.models.PaisesResponse
+import com.example.covirapp.models.PaisResponse
 import com.example.covirapp.models.UsersResponse
 import com.example.covirapp.response.LoginResponse
 import okhttp3.ResponseBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
@@ -31,4 +32,10 @@ interface CovirappService {
 
     @GET("/covirapp/files/{fileName}")
     fun getAvatar( @Path("fileName") fileName : String) : Call<ResponseBody>
+
+    @GET("/covirapp/user/me/province")
+    suspend fun getUsersByOwnProvince() : Response<UsersResponse>
+
+    @GET("/v2/countries")
+    fun getCountriesOfCovid() : Call<PaisResponse>
 }

@@ -59,6 +59,9 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
         return user.toUserDTO()
     }
 
+    @GetMapping("/user/me/province")
+    fun getAllUsersForProvince (@AuthenticationPrincipal user : User) = userRepository.findUsersWithSameProvince( user.province ).map { it.toUserDTO() }
+
     @GetMapping("/user/me/avatar/{id}")
     fun getUserAvatar ( @PathVariable id : Long ) : ResponseEntity<Resource>{
       var userFound : User = userRepository.findById( id ).get()

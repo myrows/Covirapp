@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 class ServiceGenerator {
     private val logging =
-        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     private val httpClientBuilder = OkHttpClient.Builder()
 
@@ -29,6 +29,11 @@ class ServiceGenerator {
 
     private val builder = Retrofit.Builder()
         .baseUrl(Constantes.API_BASE_URL)
+        .client(httpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+
+    private val builderCovid = Retrofit.Builder()
+        .baseUrl(Constantes.API_BASE_URL_COVID)
         .client(httpClient)
         .addConverterFactory(GsonConverterFactory.create())
 
@@ -77,7 +82,6 @@ class ServiceGenerator {
     }
 
     fun <S> createServiceUser(serviceClass: Class<S>?): S {
-        val tokenUserLogged = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("tokenId")
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(object : Interceptor {
             @Throws(IOException::class)
@@ -87,15 +91,14 @@ class ServiceGenerator {
                 val url = originalHttpUrl.newBuilder()
                     .build()
                 val requestBuilder = original.newBuilder()
-                    .header("Authorization","Bearer "+ tokenUserLogged)
                     .url(url)
                 val request = requestBuilder.build()
                 return chain.proceed(request)
             }
         })
         httpClientBuilder.addInterceptor(logging)
-        builder.client(httpClientBuilder.build())
-        retrofit = builder.build()
+        builderCovid.client(httpClientBuilder.build())
+        retrofit = builderCovid.build()
         return retrofit!!.create(serviceClass)
     }
 }

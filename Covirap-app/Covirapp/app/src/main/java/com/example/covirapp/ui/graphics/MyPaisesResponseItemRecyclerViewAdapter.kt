@@ -1,6 +1,7 @@
 package com.example.covirapp.ui.graphics
 
 import android.content.Context
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +12,22 @@ import android.widget.TextView
 import android.widget.Toast
 import coil.api.load
 import com.example.covirapp.R
-import com.example.covirapp.models.PaisesResponseItem
+import com.example.covirapp.models.Pais
+import com.example.covirapp.models.PaisResponse
 import com.example.covirapp.models.UsersResponseItem
 import kotlinx.android.synthetic.main.fragment_paises_response_item.view.*
 
 class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesResponseItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
-    private var countries: List<PaisesResponseItem> = ArrayList()
+    private var countries: List<Pais> = ArrayList<Pais>()
     lateinit var ctx : Context
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as PaisesResponseItem
+            val item = v.tag as Pais
+
+            Toast.makeText(ctx, "Clicked", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -51,8 +55,9 @@ class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesR
 
     override fun getItemCount(): Int = countries.size
 
-    fun setData( listCountries : List<PaisesResponseItem>? ) {
-        countries = listCountries!!
+    fun setData( listCountries : List<Pais> ) {
+        countries = listCountries
+        Log.d("Countries", "${countries.size}")
         notifyDataSetChanged()
     }
 

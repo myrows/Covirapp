@@ -7,6 +7,5 @@ import javax.inject.Singleton
 @Singleton
 class CovirappCountryRepository @Inject constructor(var covirappService: CovirappCountryService) {
 
-    suspend fun getCountries() = covirappService.getAllCountries()
 
 }

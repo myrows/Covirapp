@@ -30,7 +30,7 @@ class NetworkModule {
     fun provideOkHttpClient(theMovieDBInterceptor: TheMovieDBInterceptor): OkHttpClient {
 
         return with(OkHttpClient.Builder()) {
-            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             addInterceptor(OauthInterceptor())
             addInterceptor(CovidInterceptor())
             addInterceptor(theMovieDBInterceptor)

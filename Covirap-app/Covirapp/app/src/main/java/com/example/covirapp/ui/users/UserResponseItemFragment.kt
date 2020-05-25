@@ -1,20 +1,20 @@
 package com.example.covirapp.ui.users
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
 import com.example.covirapp.R
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
+import com.example.covirapp.ui.provinceStats.ProvinceStatsActivity
 import com.example.covirapp.viewmodel.CovirappViewModel
 import javax.inject.Inject
 
@@ -30,7 +30,9 @@ class UserResponseItemFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         (activity?.applicationContext as MyApplication).appComponent.inject(this)
+        setHasOptionsMenu(true);
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +52,6 @@ class UserResponseItemFragment : Fragment() {
                 }
                 adapter = userAdapter
             }
-
         //Observer para usuarios
         userViewModel.users.observe(viewLifecycleOwner, Observer { response ->
             when( response ) {
@@ -73,6 +74,24 @@ class UserResponseItemFragment : Fragment() {
             }
         })
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.user_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (R.id.graphicItem == item.itemId) {
+
+            Toast.makeText( MyApplication.instance, "Clicked", Toast.LENGTH_LONG ).show()
+
+            var goProvinceActivity : Intent = Intent( context, ProvinceStatsActivity::class.java )
+            context?.startActivity( goProvinceActivity )
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showProgressBar() {

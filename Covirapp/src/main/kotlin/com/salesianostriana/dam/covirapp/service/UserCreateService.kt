@@ -29,7 +29,7 @@ class UserCreateService(
         if (userRepository.findByUsername(username).isPresent)
             return Optional.empty()
         return Optional.of(
-                    userRepository.save(User( username = username, password = encoder.encode(password), fullName = fullName, province = province, avatar = file?.originalFilename, roles = hashSetOf(role)))
+                    userRepository.save(User( username = username, password = encoder.encode(password), fullName = fullName, province = province, avatar = file?.originalFilename, status = Status.SALUDABLE, roles = hashSetOf(role)))
         )
     }
 
