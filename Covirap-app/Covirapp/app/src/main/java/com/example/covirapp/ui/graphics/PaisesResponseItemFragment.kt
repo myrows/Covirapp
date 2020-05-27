@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.covirapp.R
 import com.example.covirapp.common.Resource
+import com.example.covirapp.common.SharedPreferencesManager
 import com.example.covirapp.di.MyApplication
 import com.example.covirapp.repository.CovirappCountryRepository
 import com.example.covirapp.viewmodel.CovirappCountryViewModel
@@ -28,6 +29,8 @@ class PaisesResponseItemFragment : Fragment() {
     var pattern = "yyyy-MM-dd"
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var date: String = simpleDateFormat.format(Date())
+
+    var countryName : String = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("nameCountry").toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +62,7 @@ class PaisesResponseItemFragment : Fragment() {
             when( response ) {
                 is Resource.Success -> {
                     response.data.let {
-                        countryAdapter.setData( it?.dates?.get(date)?.countries?.Spain!!.regions )
+                        countryAdapter.setData( it?.dates?.get(date)?.countries?.get(countryName)!!.regions )
                         recyclerView.scheduleLayoutAnimation()
                     }
                 }

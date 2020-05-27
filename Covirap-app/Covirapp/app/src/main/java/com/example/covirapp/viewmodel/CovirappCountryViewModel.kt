@@ -28,7 +28,7 @@ class CovirappCountryViewModel @Inject constructor(
 
     fun getCountriesApi() = viewModelScope.launch {
         countriesApi.value = Resource.Loading()
-        delay(3000)
+        delay(2000)
         val response = covirappRepository.getRegionsOfCounty()
         countriesApi.value = handleCountriesCovirapp( response )
     }

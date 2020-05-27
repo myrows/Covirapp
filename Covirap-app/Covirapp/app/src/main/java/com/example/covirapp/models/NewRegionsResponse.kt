@@ -15,14 +15,15 @@ data class Dates(
  */
 
 data class X20200526(
-    val countries: Countries,
+    val countries: Map<String, Spain>,
     val info: Info
 )
 
+/*
 data class Countries(
     val Spain: Spain
 )
-
+*/
 data class Spain(
     val date: String,
     val id: String,

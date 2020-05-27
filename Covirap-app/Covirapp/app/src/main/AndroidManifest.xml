@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.countries.CountryActivity"></activity>
+        <activity android:name=".ui.graphics.ProvinceActivity"></activity>
+        <activity android:name=".ui.countries.CountryActivity" />
         <activity android:name=".ui.account.TestActivity" />
         <activity android:name=".ui.account.StatusActivity" />
         <activity android:name=".ui.account.MyAccountActivity" />

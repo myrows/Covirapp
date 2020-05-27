@@ -2,7 +2,7 @@
     <string name="app_name">Covirapp</string>
     <string name="title_users">Usuarios</string>
     <string name="title_maps">Radar</string>
-    <string name="title_graphics">Regiones</string>
+    <string name="title_graphics">Países</string>
 
     <string-array name="provinces">
         <item>A Coruña</item>
@@ -61,4 +61,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="regions">Regiones</string>
 </resources>

@@ -1,7 +1,10 @@
 package com.example.covirapp.ui.countries
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,11 +12,13 @@ import coil.api.load
 import com.example.covirapp.R
 import com.example.covirapp.api.GraphicCovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
+import com.example.covirapp.common.SharedPreferencesManager
 import com.example.covirapp.models.GraphicCountryResponse
 import com.example.covirapp.models.GraphicCountryResponseItem
+import com.example.covirapp.ui.graphics.PaisesResponseItemFragment
+import com.example.covirapp.ui.graphics.ProvinceActivity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
-import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -27,11 +32,17 @@ import retrofit2.Response
 
 class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
 
+    lateinit var newDataR : LineData
+    lateinit var newDataD : LineData
+    lateinit var nameCountry : String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_country)
 
-        var nameCountry = intent.extras?.get("name").toString()
+        var chart : LineChart = findViewById(R.id.lineChartCountry)
+
+        nameCountry = intent.extras?.get("name").toString()
         setTitle(nameCountry)
 
         var imageCountry : ImageView = findViewById(R.id.imageViewCountryNovel)
@@ -43,10 +54,9 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
             allowHardware(false)
         }
 
-        var chart : LineChart
+
         var values : ArrayList<Entry> = ArrayList()
         var dataApi : MutableList<GraphicCountryResponseItem> = mutableListOf()
-        chart = findViewById(R.id.lineChartCountry)
         var count : Int = 0
 
         var generate : ServiceGenerator = ServiceGenerator()
@@ -64,34 +74,13 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
                     response.body()!!.forEach {
                         dataApi.add(it)
                     }
+                    infectedData(dataApi, values, chart)
+                    recoveredData( dataApi, chart )
+                    deathsData( dataApi, chart )
 
-                    Toast.makeText(this@CountryActivity, "${dataApi.size}", Toast.LENGTH_LONG).show()
-
-                    for ( i in dataApi ) {
-                        values.add(Entry(count.toFloat(), i.Confirmed.toFloat()))
-                        count++
-                    }
-
-                    var lineDataSet : LineDataSet = LineDataSet(values, "Infectados")
-                    lineDataSet.color = Color.RED
-                    lineDataSet.lineWidth = 1f
-                    lineDataSet.circleRadius = 0f
-                    lineDataSet.circleSize = 0f
-                    lineDataSet.setCircleColor(Color.RED)
-
-                    var lineData : LineData = LineData(lineDataSet)
-
-                    chart.data = lineData
-                    chart.setOnChartValueSelectedListener(this@CountryActivity);
-                    chart.setDrawGridBackground(false)
-                    chart.getDescription().setEnabled(false);
-                    var description : Description = Description()
-                    description.text = "eje X - Días eje Y - Nº Confirmados"
-                    chart.setNoDataText("No hemos encontrado datos en estos momentos")
-                    chart.invalidate()
                 }
-            }
 
+            }
             override fun onFailure(call: Call<GraphicCountryResponse>, t: Throwable) {
                 Toast.makeText(this@CountryActivity, "Error de conexión", Toast.LENGTH_LONG).show()
             }
@@ -102,16 +91,84 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
 
     }
 
-    private fun createSet(): LineDataSet {
-        val set = LineDataSet(null, "DataSet 1")
-        set.lineWidth = 2.5f
-        set.circleRadius = 4.5f
-        set.color = Color.rgb(240, 99, 99)
-        set.setCircleColor(Color.rgb(240, 99, 99))
-        set.highLightColor = Color.rgb(190, 190, 190)
-        set.axisDependency = AxisDependency.LEFT
-        set.valueTextSize = 10f
-        return set
+    fun infectedData( dataApi : MutableList<GraphicCountryResponseItem>, values : ArrayList<Entry>, chart : LineChart ) {
+        var count : Int = 0
+        for ( i in dataApi ) {
+            values.add(Entry(count.toFloat(), i.Confirmed.toFloat()))
+            count++
+        }
+
+        var lineDataSet : LineDataSet = LineDataSet(values, "Infectados")
+        lineDataSet.color = Color.rgb(247, 156, 45)
+        lineDataSet.lineWidth = 2.5f
+        lineDataSet.circleRadius = 1f
+        lineDataSet.circleSize = 0f
+        lineDataSet.setCircleColor(Color.rgb(247, 156, 45))
+
+        var lineData : LineData = LineData(lineDataSet)
+
+        chart.data = lineData
+        chart.setOnChartValueSelectedListener(this@CountryActivity);
+        chart.setDrawGridBackground(false)
+        chart.getDescription().setEnabled(false);
+        var description : Description = Description()
+        description.text = "eje X - Días eje Y - Nº Confirmados"
+        chart.setNoDataText("No hemos encontrado datos en estos momentos")
+        chart.invalidate()
+    }
+
+    fun recoveredData( dataApi : MutableList<GraphicCountryResponseItem>, chart : LineChart ) {
+
+        newDataR = chart.data
+
+        var valuesRecovered: ArrayList<Entry> = ArrayList()
+
+        var countR: Int = 0
+
+        for (i in dataApi) {
+            valuesRecovered.add(Entry(countR.toFloat(), i.Recovered.toFloat()))
+            countR++
+        }
+
+        var lineDataSet: LineDataSet = LineDataSet(valuesRecovered, "Recuperados")
+        lineDataSet.color = Color.rgb(19, 135, 98)
+        lineDataSet.lineWidth = 2.5f
+        lineDataSet.circleRadius = 1f
+        lineDataSet.circleSize = 0f
+        lineDataSet.setCircleColor(Color.rgb(19, 135, 98))
+
+        newDataR.addDataSet(lineDataSet)
+        newDataR.notifyDataChanged()
+        chart.notifyDataSetChanged()
+        chart.invalidate()
+
+    }
+
+    fun deathsData( dataApi : MutableList<GraphicCountryResponseItem>, chart : LineChart ) {
+
+        newDataD = chart.data
+
+        var valuesOfDeaths: ArrayList<Entry> = ArrayList()
+
+        var countD: Int = 0
+
+        for (i in dataApi) {
+            valuesOfDeaths.add(Entry(countD.toFloat(), i.Deaths.toFloat()))
+            countD++
+        }
+
+        var lineDataSet: LineDataSet = LineDataSet(valuesOfDeaths, "Muertes")
+        lineDataSet.color = Color.RED
+        lineDataSet.lineWidth = 2.5f
+        lineDataSet.circleRadius = 1f
+        lineDataSet.circleSize = 0f
+        lineDataSet.setCircleColor(Color.RED)
+
+        newDataD.addDataSet(lineDataSet)
+        newDataD.notifyDataChanged()
+        chart.notifyDataSetChanged()
+        chart.invalidate()
+
     }
 
     override fun onNothingSelected() {
@@ -119,5 +176,21 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
         Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.country_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if ( item.itemId == R.id.goRegions ) {
+            var goRegions : Intent = Intent( this@CountryActivity, ProvinceActivity::class.java )
+            SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("nameCountry", nameCountry)
+            startActivity( goRegions )
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
