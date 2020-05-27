@@ -1,22 +1,37 @@
 package com.example.covirapp.viewmodel
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.covirapp.models.Pais
-import com.example.covirapp.models.PaisResponse
+import androidx.lifecycle.viewModelScope
+import com.example.covirapp.common.Resource
+import com.example.covirapp.models.CountryResponse
 import com.example.covirapp.repository.CountryRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import javax.inject.Inject
 
-class CountryViewModel : ViewModel() {
+class CountryViewModel @Inject constructor( private val countryRepository: CountryRepository ) : ViewModel() {
 
-    var countryRepository : CountryRepository
-    var countries : LiveData<List<Pais>>
+    var countryApi : MutableLiveData<Resource<CountryResponse>> = MutableLiveData()
 
     init {
-        countryRepository = CountryRepository()
-        countries = countryRepository.getAllCountriesCovid()
+        getCountries()
     }
 
-    fun getAllCountries() : LiveData<List<Pais>> {
-        return countries
+    fun getCountries() = viewModelScope.launch {
+        countryApi.value = Resource.Loading()
+        delay(2000)
+        val response = countryRepository.getCountry()
+        countryApi.value = handleCountriesCovirapp( response )
+    }
+
+    private fun handleCountriesCovirapp ( response: Response<CountryResponse>) : Resource<CountryResponse> {
+        if ( response.isSuccessful ) {
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
     }
 }

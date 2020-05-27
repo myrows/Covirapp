@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Covirapp</string>
-    <string name="title_users">Users</string>
-    <string name="title_maps">Maps</string>
-    <string name="title_graphics">Graphics</string>
-    
+    <string name="title_users">Usuarios</string>
+    <string name="title_maps">Radar</string>
+    <string name="title_graphics">Regiones</string>
+
     <string-array name="provinces">
         <item>A Coruña</item>
         <item>Álava</item>
@@ -51,4 +51,14 @@
         <item>Zamora</item>
         <item>Zaragoza</item>
     </string-array>
+
+    <string-array name="status">
+        <item>SALUDABLE</item>
+        <item>RECUPERADO</item>
+        <item>INFECTADO</item>
+        <item>ASINTOMATICO</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.covirapp.api.CovirappCountryService
 import com.example.covirapp.common.Resource
+import com.example.covirapp.models.NewRegionsResponse
 import com.example.covirapp.models.UsersResponse
 import com.example.covirapp.repository.CovirappCountryRepository
 import com.example.covirapp.repository.CovirappRepository
@@ -18,7 +19,7 @@ class CovirappCountryViewModel @Inject constructor(
     private val covirappRepository: CovirappCountryRepository
 ) : ViewModel() {
 
-    /*var countriesApi : MutableLiveData<Resource<PaisesResponse>> = MutableLiveData()
+    var countriesApi : MutableLiveData<Resource<NewRegionsResponse>> = MutableLiveData()
 
     init {
         getCountriesApi()
@@ -27,17 +28,17 @@ class CovirappCountryViewModel @Inject constructor(
 
     fun getCountriesApi() = viewModelScope.launch {
         countriesApi.value = Resource.Loading()
-        delay(2000)
-        val response = covirappRepository.getCountries()
+        delay(3000)
+        val response = covirappRepository.getRegionsOfCounty()
         countriesApi.value = handleCountriesCovirapp( response )
     }
 
-    private fun handleCountriesCovirapp ( response: Response<PaisesResponse> ) : Resource<PaisesResponse> {
+    private fun handleCountriesCovirapp ( response: Response<NewRegionsResponse> ) : Resource<NewRegionsResponse> {
         if ( response.isSuccessful ) {
             response.body()?.let { resultResponse ->
                 return Resource.Success(resultResponse)
             }
         }
         return Resource.Error(response.message())
-    }*/
+    }
 }

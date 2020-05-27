@@ -43,7 +43,16 @@ dependencies {
     def okhttpVersion = '4.5.0'
     def retrofitVersion = '2.8.1'
     def lottieVersion = '3.4.0'
+    def aws_version = "2.16.12"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.amazonaws:aws-android-sdk-s3:$aws_version"
+    implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_version") { transitive = true }
+    implementation 'com.amazonaws:aws-android-sdk-rekognition:2.16.12'
+    implementation "com.google.android.gms:play-services-vision:11.4.2"
+    implementation "com.amazonaws:aws-android-sdk-sns:2.7.0"
+    implementation "com.amazonaws:aws-android-sdk-sqs:2.7.0"
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.7.+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
@@ -80,4 +89,5 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.27'
     // Lottie
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation "org.glassfish:javax.annotation:10.0-b28"
 }

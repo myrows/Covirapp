@@ -1,33 +1,38 @@
 package com.example.covirapp.ui.graphics
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import coil.api.load
 import com.example.covirapp.R
-import com.example.covirapp.models.Pais
-import com.example.covirapp.models.PaisResponse
-import com.example.covirapp.models.UsersResponseItem
+import com.example.covirapp.models.Region
+import com.example.covirapp.ui.users.RegionDetailActivity
 import kotlinx.android.synthetic.main.fragment_paises_response_item.view.*
 
 class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesResponseItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
-    private var countries: List<Pais> = ArrayList<Pais>()
+    private var countries: List<Region> = ArrayList<Region>()
     lateinit var ctx : Context
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Pais
+            val item = v.tag as Region
 
-            Toast.makeText(ctx, "Clicked", Toast.LENGTH_LONG).show()
+            var goRegionDetail : Intent = Intent( ctx, RegionDetailActivity::class.java  )
+            goRegionDetail.putExtra("name", item.name_es)
+            goRegionDetail.putExtra("confirmed", item.today_confirmed)
+            goRegionDetail.putExtra("recovered", item.today_recovered)
+            goRegionDetail.putExtra("deaths", item.today_deaths)
+            ctx.startActivity( goRegionDetail )
+
+
         }
     }
 
@@ -43,8 +48,7 @@ class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesR
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = countries[position]
 
-        holder.cPhoto.load(item.countryInfo.flag)
-        holder.cTextCountry.text = item.country
+        holder.cTextCountry.text = item.name_es
 
         with(holder.mView) {
             tag = item
@@ -55,7 +59,7 @@ class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesR
 
     override fun getItemCount(): Int = countries.size
 
-    fun setData( listCountries : List<Pais> ) {
+    fun setData( listCountries : List<Region> ) {
         countries = listCountries
         Log.d("Countries", "${countries.size}")
         notifyDataSetChanged()

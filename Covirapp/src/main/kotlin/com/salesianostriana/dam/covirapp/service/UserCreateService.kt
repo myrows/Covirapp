@@ -34,8 +34,8 @@ class UserCreateService(
     }
 
     fun edit( userToEdit : CreateUserDTO, userFound : User ) : UserDTO {
-        var userUpdated : User = userFound.copy(username = userToEdit.username, password = encoder.encode(userToEdit.password), fullName = userToEdit.fullName, province = userToEdit.province,
-                status = userToEdit.status, roles = userFound.roles, quizs = userFound.quizs, authorities = userFound.authorities, nonExpired = userFound.isAccountNonExpired, nonLocked = userFound.isAccountNonLocked, enabled = userFound.isEnabled, credentialsNonExpired = userFound.isCredentialsNonExpired )
+        var userUpdated : User = userFound.copy(username = userToEdit.username, password = encoder.encode(userToEdit.password), fullName = userToEdit.fullName, province = userFound.province,
+                status = userFound.status, roles = userFound.roles, quizs = userFound.quizs, authorities = userFound.authorities, nonExpired = userFound.isAccountNonExpired, nonLocked = userFound.isAccountNonLocked, enabled = userFound.isEnabled, credentialsNonExpired = userFound.isCredentialsNonExpired )
 
         return userRepository.save(userUpdated).toUserDTO()
     }
@@ -58,8 +58,12 @@ class UserCreateService(
             userFound.status = Status.INFECTADO
         }
 
+        if ( lastUserQuiz.contactWithInfected && countStatistics >= 3 ) {
+            userFound.status = Status.INFECTADO
+        }
+
         when ( countStatistics ) {
-            in 0..3 -> userFound.status = Status.SALUDABLE
+            in 0..3 -> { if( !lastUserQuiz.contactWithInfected ) userFound.status = Status.SALUDABLE }
             in 4..9 -> userFound.status = Status.INFECTADO
 
         }

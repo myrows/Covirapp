@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -32,8 +34,8 @@ class ServiceGenerator {
         .client(httpClient)
         .addConverterFactory(GsonConverterFactory.create())
 
-    private val builderCovid = Retrofit.Builder()
-        .baseUrl(Constantes.API_BASE_URL_COVID)
+    private val builderGraphicsCovid = Retrofit.Builder()
+        .baseUrl(Constantes.API_BASE_URL_GRAPHIC)
         .client(httpClient)
         .addConverterFactory(GsonConverterFactory.create())
 
@@ -81,7 +83,36 @@ class ServiceGenerator {
         return retrofit!!.create(serviceClass)
     }
 
+    fun <S> createServiceGraphic(serviceClass: Class<S>?): S {
+        var pattern = "yyyy-MM-dd"
+        var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
+        var date: String = simpleDateFormat.format(Date())
+        val httpClientBuilder = OkHttpClient.Builder()
+        httpClientBuilder.addInterceptor(object : Interceptor {
+            @NotNull
+            @Throws(IOException::class)
+            override fun intercept(@NotNull chain: Interceptor.Chain): Response {
+                val original: Request = chain.request()
+                val originalHttpUrl: HttpUrl = original.url
+                val url = originalHttpUrl.newBuilder()
+                    .addQueryParameter("from", "2020-01-22")
+                    .addQueryParameter("to", date)
+                    .build()
+                val requestBuilder: Request.Builder = original.newBuilder()
+                    .url(url)
+                val request: Request = requestBuilder.build()
+                return chain.proceed(request)
+            }
+        })
+        httpClientBuilder.addInterceptor(logging)
+        builderGraphicsCovid.client(httpClientBuilder.build())
+        retrofit = builderGraphicsCovid.build()
+        return retrofit!!.create(serviceClass)
+    }
+
     fun <S> createServiceUser(serviceClass: Class<S>?): S {
+        var token = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("tokenId").toString()
+
         val httpClientBuilder = OkHttpClient.Builder()
         httpClientBuilder.addInterceptor(object : Interceptor {
             @Throws(IOException::class)
@@ -91,14 +122,15 @@ class ServiceGenerator {
                 val url = originalHttpUrl.newBuilder()
                     .build()
                 val requestBuilder = original.newBuilder()
+                    .header("Authorization","Bearer "+ token)
                     .url(url)
                 val request = requestBuilder.build()
                 return chain.proceed(request)
             }
         })
         httpClientBuilder.addInterceptor(logging)
-        builderCovid.client(httpClientBuilder.build())
-        retrofit = builderCovid.build()
+        builder.client(httpClientBuilder.build())
+        retrofit = builder.build()
         return retrofit!!.create(serviceClass)
     }
 }

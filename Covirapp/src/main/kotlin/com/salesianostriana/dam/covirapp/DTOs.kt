@@ -20,14 +20,15 @@ data class QuizDTO (
         val smellLost : Boolean,
         val fever : Boolean,
         val riskPerson : Boolean,
+        val contactWithInfected : Boolean,
         val timeCreated : LocalDate? = null,
         val lastUpdated : LocalDate? = null,
         val id : Long? = null
 )
 
-fun Quiz.toQuizDTO() = QuizDTO ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, timeCreated, lastUpdated, id)
+fun Quiz.toQuizDTO() = QuizDTO ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, contactWithInfected, timeCreated, lastUpdated, id)
 
-fun QuizDTO.toQuiz() = Quiz ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, null, timeCreated, lastUpdated, id )
+fun QuizDTO.toQuiz() = Quiz ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, contactWithInfected, null, timeCreated, lastUpdated, id )
 
 data class NuevoQuizDTO(
         val years : Int,
@@ -38,6 +39,7 @@ data class NuevoQuizDTO(
         val smellLost : Boolean,
         val fever : Boolean,
         val riskPerson : Boolean,
+        val contactWithInfected : Boolean,
         @AuthenticationPrincipal val user : User? = null,
         @JsonFormat( shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" )
         @DateTimeFormat(style = "yyyy-MM-dd")
@@ -49,7 +51,7 @@ data class NuevoQuizDTO(
         val lastUpdated: LocalDate? = null
 )
 
-fun NuevoQuizDTO.toQuiz() = Quiz ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, user, timeCreated, lastUpdated )
+fun NuevoQuizDTO.toQuiz() = Quiz ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, contactWithInfected, user, timeCreated, lastUpdated )
 
 data class UserDTO(
         var username : String,

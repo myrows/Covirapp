@@ -33,7 +33,7 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     @PostMapping("/quiz")
     fun createQuiz( @RequestBody quiz : NuevoQuizDTO, @AuthenticationPrincipal user : User ) : Quiz {
         return quizRepository.save(NuevoQuizDTO( quiz.years, quiz.cough, quiz.neckPain, quiz.respiratoryPain, quiz.tasteLost, quiz.smellLost, quiz.fever,
-        quiz.riskPerson, user).toQuiz())
+        quiz.riskPerson, quiz.contactWithInfected, user).toQuiz())
     }
 
     @PutMapping("/quiz/{userAuthenticated}")
@@ -85,9 +85,9 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
         return userService.edit( user, userRepository.findById( id ).get() )
     }
 
-    @PutMapping("/user/status/{id}")
-    fun editStatusUser( @PathVariable id: Long ) :UserDTO {
-        return userService.testStatus( userRepository.findById( id ).get() )
+    @PutMapping("/quiz/status/")
+    fun editStatusUser( @AuthenticationPrincipal user: User ) :UserDTO {
+        return userService.testStatus( user )
     }
 
     @PutMapping("/user/me/status")

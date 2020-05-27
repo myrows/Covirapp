@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.airbnb.lottie.LottieAnimationView
+import com.example.covirapp.ui.account.MyAccountActivity
 import com.example.covirapp.R
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
-import com.example.covirapp.ui.provinceStats.ProvinceStatsActivity
 import com.example.covirapp.viewmodel.CovirappViewModel
 import javax.inject.Inject
 
@@ -28,7 +28,6 @@ class UserResponseItemFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         (activity?.applicationContext as MyApplication).appComponent.inject(this)
         setHasOptionsMenu(true);
     }
@@ -39,7 +38,6 @@ class UserResponseItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user_response_item_list, container, false)
-
         userAdapter = MyUserResponseItemRecyclerViewAdapter()
 
         // Set the adapter
@@ -83,11 +81,9 @@ class UserResponseItemFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (R.id.graphicItem == item.itemId) {
+        if (R.id.myAccount == item.itemId) {
 
-            Toast.makeText( MyApplication.instance, "Clicked", Toast.LENGTH_LONG ).show()
-
-            var goProvinceActivity : Intent = Intent( context, ProvinceStatsActivity::class.java )
+            var goProvinceActivity : Intent = Intent( context, MyAccountActivity::class.java )
             context?.startActivity( goProvinceActivity )
         }
 

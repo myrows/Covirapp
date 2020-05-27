@@ -40,6 +40,9 @@ data class Quiz (
         @Column( name = "risk_person" )
         var riskPerson : Boolean,
 
+        @Column( name = "contact_with_infected" )
+        var contactWithInfected : Boolean,
+
         @JsonBackReference @ManyToOne var user : User? = null,
 
         @Column( name = "created_date", nullable = false, updatable = false )

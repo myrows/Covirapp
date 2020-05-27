@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/graphicItem"
-        android:icon="@drawable/ic_black_graphic"
-        android:title="graphics"
+        android:id="@+id/myAccount"
+        android:icon="@drawable/ic_person_white_24dp"
+        android:title="Mi cuenta"
         app:showAsAction="ifRoom" />
 </menu>

@@ -1,7 +1,9 @@
 package com.example.covirapp.api.generator
 
+import com.example.covirapp.api.CountryService
 import com.example.covirapp.api.CovirappCountryService
 import com.example.covirapp.api.CovirappService
+import com.example.covirapp.api.GraphicCovirappService
 import com.example.covirapp.common.Constantes
 import dagger.Module
 import dagger.Provides
@@ -22,18 +24,23 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    @Named("urlCovid")
-    fun provideCovidBaseUrl(): String = Constantes.API_BASE_URL_COVID
+    @Named("urlCovidRegions")
+    fun provideCovidBaseUrl(): String = Constantes.API_BASE_URL_REGIONS
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(theMovieDBInterceptor: TheMovieDBInterceptor): OkHttpClient {
+    @Named("urlCovidCountry")
+    fun provideCovidCountryBaseUrl(): String = Constantes.API_BASE_URL_COVID_COUNTRY
+
+    @Singleton
+    @Provides
+    @Named("okHttpClientApiCovid")
+    fun provideOkHttpClientCredentials(covirappInterceptor: CovirappInterceptor): OkHttpClient {
 
         return with(OkHttpClient.Builder()) {
-            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             addInterceptor(OauthInterceptor())
-            addInterceptor(CovidInterceptor())
-            addInterceptor(theMovieDBInterceptor)
+            addInterceptor(covirappInterceptor)
             connectTimeout(Constantes.TIMEOUT_INMILIS, TimeUnit.MILLISECONDS)
             build()
         }
@@ -41,7 +48,33 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideTheMovieDBRetrofitService(@Named("url") baseUrl: String, okHttpClient: OkHttpClient): CovirappService {
+    @Named("okHttpClientRegions")
+    fun provideOkHttpClientRegions(apiRegionsInterceptor: CovidInterceptor): OkHttpClient {
+
+        return with(OkHttpClient.Builder()) {
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            addInterceptor(apiRegionsInterceptor)
+            connectTimeout(Constantes.TIMEOUT_INMILIS, TimeUnit.MILLISECONDS)
+            build()
+        }
+    }
+
+    @Singleton
+    @Provides
+    @Named("okHttpClientCountries")
+    fun provideOkHttpClientCountries(apiCountriesInterceptor: CovidInterceptor): OkHttpClient {
+
+        return with(OkHttpClient.Builder()) {
+            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            addInterceptor(apiCountriesInterceptor)
+            connectTimeout(Constantes.TIMEOUT_INMILIS, TimeUnit.MILLISECONDS)
+            build()
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideOwnApiRetrofitService(@Named("url") baseUrl: String, @Named("okHttpClientApiCovid") okHttpClient: OkHttpClient): CovirappService {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -52,12 +85,23 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideCovidRetrofitService(@Named("urlCovid") baseUrl: String, okHttpClient: OkHttpClient): CovirappCountryService {
+    fun provideCovidRegionsRetrofitService(@Named("urlCovidRegions") baseUrl: String, @Named("okHttpClientRegions") okHttpClient: OkHttpClient): CovirappCountryService {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
             .create(CovirappCountryService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCovidCountryRetrofitService(@Named("urlCovidCountry") baseUrl: String, @Named("okHttpClientCountries") okHttpClient: OkHttpClient): CountryService {
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(CountryService::class.java)
     }
 }

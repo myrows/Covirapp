@@ -1,19 +1,27 @@
 package com.example.covirapp.api
 
-import com.example.covirapp.models.Login
-import com.example.covirapp.models.PaisResponse
-import com.example.covirapp.models.UsersResponse
+import com.example.covirapp.models.*
 import com.example.covirapp.response.LoginResponse
 import okhttp3.ResponseBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.*
-import java.util.*
 
 interface CovirappService {
+
+    @GET("/covirapp/user")
+    suspend fun getAllUsers(): Response<UsersResponse>
+
+    @GET("/covirapp/files/{fileName}")
+    fun getAvatar( @Path("fileName") fileName : String) : Call<ResponseBody>
+
+    @GET("/covirapp/user/me/province")
+    suspend fun getUsersByOwnProvince() : Response<UsersResponse>
+
+    @GET("/covirapp/user/me")
+    fun getUserDataAuthenticated() : Call<UsersResponseItem>
 
     @POST("/oauth/token")
     @FormUrlEncoded
@@ -27,15 +35,15 @@ interface CovirappService {
                  @Part("province") province : RequestBody,
                  @Part uploadfile : MultipartBody.Part) : Call<ResponseBody>
 
-    @GET("/covirapp/user")
-    suspend fun getAllUsers(): Response<UsersResponse>
+    @POST("/covirapp/quiz")
+    fun createQuiz ( @Body quiz : QuizDto ) : Call<QuizResponse>
 
-    @GET("/covirapp/files/{fileName}")
-    fun getAvatar( @Path("fileName") fileName : String) : Call<ResponseBody>
+    @PUT("/covirapp/user/{id}")
+    fun editUser( @Path ("id") id : Long, @Body newUser : UserDto ) : Call<ResponseBody>
 
-    @GET("/covirapp/user/me/province")
-    suspend fun getUsersByOwnProvince() : Response<UsersResponse>
+    @PUT("/covirapp/user/me/status")
+    fun updateStatus( @Body user : UserDto ) : Call<UsersResponseItem>
 
-    @GET("/v2/countries")
-    fun getCountriesOfCovid() : Call<PaisResponse>
+    @PUT("/covirapp/quiz/status/")
+    fun statusTest() : Call<ResponseBody>
 }
