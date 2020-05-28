@@ -111,8 +111,6 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
         chart.setOnChartValueSelectedListener(this@CountryActivity);
         chart.setDrawGridBackground(false)
         chart.getDescription().setEnabled(false);
-        var description : Description = Description()
-        description.text = "eje X - Días eje Y - Nº Confirmados"
         chart.setNoDataText("No hemos encontrado datos en estos momentos")
         chart.invalidate()
     }
@@ -187,7 +185,7 @@ class CountryActivity : AppCompatActivity(), OnChartValueSelectedListener {
 
         if ( item.itemId == R.id.goRegions ) {
             var goRegions : Intent = Intent( this@CountryActivity, ProvinceActivity::class.java )
-            SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("nameCountry", nameCountry)
+            goRegions.putExtra("nameC", nameCountry)
             startActivity( goRegions )
         }
 

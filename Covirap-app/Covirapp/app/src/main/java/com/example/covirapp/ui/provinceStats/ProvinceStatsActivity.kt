@@ -4,23 +4,15 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.example.covirapp.R
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import coil.api.load
-import com.example.covirapp.api.CovirappService
-import com.example.covirapp.api.generator.ServiceGenerator
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
-import com.example.covirapp.models.UsersResponse
 import com.example.covirapp.models.UsersResponseItem
-import com.example.covirapp.viewmodel.CovirappCountryViewModel
 import com.example.covirapp.viewmodel.CovirappViewModel
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
@@ -28,9 +20,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.activity_province_stats.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 class ProvinceStatsActivity : AppCompatActivity() {

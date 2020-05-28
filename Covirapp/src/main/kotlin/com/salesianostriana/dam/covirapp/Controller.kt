@@ -86,8 +86,8 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     }
 
     @PutMapping("/quiz/status/")
-    fun editStatusUser( @AuthenticationPrincipal user: User ) :UserDTO {
-        return userService.testStatus( user )
+    fun editStatusUser( @RequestBody quiz : NuevoQuizDTO, @AuthenticationPrincipal user: User ) :UserDTO {
+        return userService.testStatus( quiz, user )
     }
 
     @PutMapping("/user/me/status")

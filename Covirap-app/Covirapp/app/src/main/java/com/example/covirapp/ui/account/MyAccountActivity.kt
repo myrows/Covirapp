@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -40,6 +41,7 @@ class MyAccountActivity : AppCompatActivity() {
         var test : CardView = findViewById(R.id.cardViewAccount2)
         var updateStatus : CardView = findViewById(R.id.cardViewAccount3)
         var saveUser : Button = findViewById(R.id.buttonMyAccountSave)
+        var userPassword : String = ""
 
         var serviceGenerator : ServiceGenerator = ServiceGenerator()
         var service : CovirappService
@@ -66,7 +68,8 @@ class MyAccountActivity : AppCompatActivity() {
                     Log.d("UserId", "$userId")
                     edUsername.text = response.body()?.username?.toEditable()
                     edFullName.text = response.body()?.fullName?.toEditable()
-                    edPassword.text = response.body()?.password?.toEditable()
+                    userPassword = response.body()?.password!!
+                    //edPassword.inputType = InputType.TYPE_CLASS_TEXT
                 }
             }
 
@@ -79,6 +82,10 @@ class MyAccountActivity : AppCompatActivity() {
 
             if( status == null ) {
                 status = "SALUDABLE"
+            }
+
+            if ( edPassword.text.isEmpty() ) {
+                edPassword.text = userPassword.toEditable()
             }
 
             var userDto : UserDto = UserDto( username = edUsername.text.toString(), fullName = edFullName.text.toString(),

@@ -1,7 +1,6 @@
 package com.example.covirapp.ui.graphics
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,19 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import com.example.covirapp.R
-import com.example.covirapp.common.Resource
-import com.example.covirapp.common.SharedPreferencesManager
+import com.example.covirapp.api.CovirappCountryService
+import com.example.covirapp.api.generator.ServiceGenerator
 import com.example.covirapp.di.MyApplication
-import com.example.covirapp.repository.CovirappCountryRepository
-import com.example.covirapp.viewmodel.CovirappCountryViewModel
+import com.example.covirapp.models.NewRegionsResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 class PaisesResponseItemFragment : Fragment() {
-    @Inject lateinit var countryViewModel: CovirappCountryViewModel
     private lateinit var countryAdapter: MyPaisesResponseItemRecyclerViewAdapter
     private var columnCount = 1
 
@@ -30,12 +28,14 @@ class PaisesResponseItemFragment : Fragment() {
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var date: String = simpleDateFormat.format(Date())
 
-    var countryName : String = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("nameCountry").toString()
+    var generator : ServiceGenerator = ServiceGenerator()
+    lateinit var serviceRegions : CovirappCountryService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (activity?.applicationContext as MyApplication).appComponent.inject(this)
+        activity?.setTitle("Regiones")
+        serviceRegions = generator.createServiceRegions(CovirappCountryService::class.java)
 
     }
 
@@ -58,21 +58,22 @@ class PaisesResponseItemFragment : Fragment() {
             adapter = countryAdapter
         }
         //Observer para usuarios
-        countryViewModel.countriesApi.observe(viewLifecycleOwner, Observer { response ->
-            when( response ) {
-                is Resource.Success -> {
-                    response.data.let {
-                        countryAdapter.setData( it?.dates?.get(date)?.countries?.get(countryName)!!.regions )
+        var call : Call<NewRegionsResponse> = serviceRegions.getRegionsOfCovid( date, activity?.intent?.extras?.get("nameC").toString() )
+        call.enqueue( object : Callback<NewRegionsResponse> {
+            override fun onResponse(
+                call: Call<NewRegionsResponse>,
+                response: Response<NewRegionsResponse>
+            ) {
+                if ( response.isSuccessful ) {
+                    response.body().let {
+                        countryAdapter.setData( it?.dates?.get(date)?.countries?.get(activity?.intent?.extras?.get("nameC").toString())!!.regions )
                         recyclerView.scheduleLayoutAnimation()
                     }
                 }
-                is Resource.Error -> {
-                    response.message.let {
-                        Toast.makeText(MyApplication.instance, "Ha ocurrido un error", Toast.LENGTH_LONG).show()
-                    }
-                }
-                is Resource.Loading -> {
-                }
+            }
+
+            override fun onFailure(call: Call<NewRegionsResponse>, t: Throwable) {
+                Toast.makeText(MyApplication.instance, "Ha ocurrido un error", Toast.LENGTH_LONG).show()
             }
         })
         return view

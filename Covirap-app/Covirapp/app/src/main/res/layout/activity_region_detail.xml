@@ -233,7 +233,7 @@
             app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_add_avatar" />
+            app:srcCompat="@drawable/ic_regions_coronavirus" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.covirapp.service
 
 import com.salesianostriana.dam.covirapp.CreateUserDTO
+import com.salesianostriana.dam.covirapp.NuevoQuizDTO
 import com.salesianostriana.dam.covirapp.UserDTO
 import com.salesianostriana.dam.covirapp.domain.Permission
 import com.salesianostriana.dam.covirapp.domain.Role
@@ -40,30 +41,27 @@ class UserCreateService(
         return userRepository.save(userUpdated).toUserDTO()
     }
 
-    fun testStatus( userFound : User ) : UserDTO {
-
-        var sizeUserQuiz = userFound.quizs!!.size
-        var lastUserQuiz = userFound.quizs!!.get(sizeUserQuiz - 1)
+    fun testStatus( quiz : NuevoQuizDTO, userFound : User ) : UserDTO {
         var countStatistics : Int = 0
 
-        when ( lastUserQuiz.cough ) { true -> countStatistics++ }
-        when ( lastUserQuiz.fever ) { true -> countStatistics+= 2 }
-        when ( lastUserQuiz.neckPain ) { true -> countStatistics++ }
-        when ( lastUserQuiz.respiratoryPain ) { true -> countStatistics+= 2 }
-        when ( lastUserQuiz.tasteLost ) { true -> countStatistics++ }
-        when ( lastUserQuiz.smellLost ) { true -> countStatistics++ }
-        when ( lastUserQuiz.riskPerson ) { true -> countStatistics++ }
+        when ( quiz.cough ) { true -> countStatistics++ }
+        when ( quiz.fever ) { true -> countStatistics+= 2 }
+        when ( quiz.neckPain ) { true -> countStatistics++ }
+        when ( quiz.respiratoryPain ) { true -> countStatistics+= 2 }
+        when ( quiz.tasteLost ) { true -> countStatistics++ }
+        when ( quiz.smellLost ) { true -> countStatistics++ }
+        when ( quiz.riskPerson ) { true -> countStatistics++ }
 
-        if ( lastUserQuiz.fever && lastUserQuiz.respiratoryPain ) {
+        if ( quiz.fever && quiz.respiratoryPain ) {
             userFound.status = Status.INFECTADO
         }
 
-        if ( lastUserQuiz.contactWithInfected && countStatistics >= 3 ) {
+        if ( quiz.contactWithInfected && countStatistics >= 3 ) {
             userFound.status = Status.INFECTADO
         }
 
         when ( countStatistics ) {
-            in 0..3 -> { if( !lastUserQuiz.contactWithInfected ) userFound.status = Status.SALUDABLE }
+            in 0..3 -> { if( !quiz.contactWithInfected ) userFound.status = Status.SALUDABLE }
             in 4..9 -> userFound.status = Status.INFECTADO
 
         }

@@ -15,9 +15,29 @@ class InitDataComponent( val userRepository: UserRepository, val quizRepository:
     @PostConstruct
     fun initData ( ) {
 
+        // Quiz
         var quiz = Quiz ( 36, false, false, false, false, true, false, false, false )
         var quiz1 = Quiz ( 39, true, false, false, false, true, false, false, false )
 
-        quizRepository.saveAll(listOf<Quiz>(quiz, quiz1))
+        var listQuiz = listOf<Quiz>(quiz, quiz1)
+        for ( q in listQuiz ) {
+            var resp = quizRepository.findById( q.id!! )
+
+            if ( !resp.isPresent ) {
+                quizRepository.save(q)
+            }
+        }
+
+        // User
+
+
+        var listUsers = listOf<User>()
+        for ( u in listUsers ) {
+            var resp = userRepository.findById( u.id!! )
+
+            if ( !resp.isPresent ) {
+                userRepository.save(u)
+            }
+        }
     }
 }

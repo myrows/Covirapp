@@ -32,7 +32,7 @@ class MyCountryRecyclerViewAdapter(
             val item = v.tag as CountryResponseItem
 
             var goCountryDetails = Intent( ctx, CountryActivity::class.java )
-            SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("nameCountry", item.country);
+            SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("countrySelected", item.country);
             goCountryDetails.putExtra("name", item.country)
             goCountryDetails.putExtra("flag", item.countryInfo.flag)
             goCountryDetails.putExtra("cases", item.cases )

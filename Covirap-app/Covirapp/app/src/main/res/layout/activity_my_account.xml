@@ -10,28 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageViewUserAccount"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_avatar" />
+        <ImageView
+            android:id="@+id/imageViewUserAccount"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_add_avatar" />
 
-    <EditText
-        android:id="@+id/editTextMyAccountUsername"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Usuario"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUserAccount" />
+        <EditText
+            android:id="@+id/editTextMyAccountUsername"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Usuario"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewUserAccount" />
 
     <EditText
         android:id="@+id/editTextMyAccountFullName"
@@ -46,36 +46,45 @@
         app:layout_constraintStart_toStartOf="@+id/editTextMyAccountUsername"
         app:layout_constraintTop_toBottomOf="@+id/editTextMyAccountUsername" />
 
-    <EditText
-        android:id="@+id/editTextMyAccountPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Contraseña"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/editTextMyAccountFullName"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editTextMyAccountFullName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextMyAccountFullName" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="@+id/editTextMyAccountFullName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/editTextMyAccountFullName"
+            app:layout_constraintTop_toBottomOf="@+id/editTextMyAccountFullName"
+            app:passwordToggleEnabled="true">
 
-    <Button
-        android:id="@+id/buttonMyAccountSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/custom_button"
-        android:text="Guardar"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/editTextMyAccountPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextMyAccountPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextMyAccountPassword" />
+            <EditText
+                android:id="@+id/editTextMyAccountPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Contraseña"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/buttonMyAccountSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/custom_button"
+            android:text="Guardar"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView21"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="30dp"
             android:layout_marginTop="8dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintTop_toBottomOf="@+id/buttonMyAccountSave"></androidx.cardview.widget.CardView>
@@ -247,6 +256,34 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextMyAccountUsername"
+            app:layout_constraintStart_toStartOf="@+id/editTextMyAccountUsername"
+            app:layout_constraintTop_toTopOf="@+id/editTextMyAccountUsername"
+            app:srcCompat="@drawable/ic_person_black_24dp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextMyAccountFullName"
+            app:layout_constraintStart_toStartOf="@+id/editTextMyAccountFullName"
+            app:layout_constraintTop_toTopOf="@+id/editTextMyAccountFullName"
+            app:srcCompat="@drawable/ic_people_black_24dp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayout"
+            app:srcCompat="@drawable/ic_lock_black_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

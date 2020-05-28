@@ -24,11 +24,6 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    @Named("urlCovidRegions")
-    fun provideCovidBaseUrl(): String = Constantes.API_BASE_URL_REGIONS
-
-    @Singleton
-    @Provides
     @Named("urlCovidCountry")
     fun provideCovidCountryBaseUrl(): String = Constantes.API_BASE_URL_COVID_COUNTRY
 
@@ -41,19 +36,6 @@ class NetworkModule {
             addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
             addInterceptor(OauthInterceptor())
             addInterceptor(covirappInterceptor)
-            connectTimeout(Constantes.TIMEOUT_INMILIS, TimeUnit.MILLISECONDS)
-            build()
-        }
-    }
-
-    @Singleton
-    @Provides
-    @Named("okHttpClientRegions")
-    fun provideOkHttpClientRegions(apiRegionsInterceptor: CovidInterceptor): OkHttpClient {
-
-        return with(OkHttpClient.Builder()) {
-            addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-            addInterceptor(apiRegionsInterceptor)
             connectTimeout(Constantes.TIMEOUT_INMILIS, TimeUnit.MILLISECONDS)
             build()
         }
@@ -81,17 +63,6 @@ class NetworkModule {
             .client(okHttpClient)
             .build()
             .create(CovirappService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCovidRegionsRetrofitService(@Named("urlCovidRegions") baseUrl: String, @Named("okHttpClientRegions") okHttpClient: OkHttpClient): CovirappCountryService {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-            .create(CovirappCountryService::class.java)
     }
 
     @Singleton

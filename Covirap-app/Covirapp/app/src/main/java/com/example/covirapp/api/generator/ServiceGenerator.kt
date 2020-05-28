@@ -39,6 +39,11 @@ class ServiceGenerator {
         .client(httpClient)
         .addConverterFactory(GsonConverterFactory.create())
 
+    private val builderRegionsCovid = Retrofit.Builder()
+        .baseUrl(Constantes.API_BASE_URL_REGIONS)
+        .client(httpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+
     var retrofit: Retrofit? = null
 
     fun <S> createServiceLogin(serviceClass: Class<S>?): S {
@@ -107,6 +112,28 @@ class ServiceGenerator {
         httpClientBuilder.addInterceptor(logging)
         builderGraphicsCovid.client(httpClientBuilder.build())
         retrofit = builderGraphicsCovid.build()
+        return retrofit!!.create(serviceClass)
+    }
+
+    fun <S> createServiceRegions(serviceClass: Class<S>?): S {
+        val httpClientBuilder = OkHttpClient.Builder()
+        httpClientBuilder.addInterceptor(object : Interceptor {
+            @NotNull
+            @Throws(IOException::class)
+            override fun intercept(@NotNull chain: Interceptor.Chain): Response {
+                val original: Request = chain.request()
+                val originalHttpUrl: HttpUrl = original.url
+                val url = originalHttpUrl.newBuilder()
+                    .build()
+                val requestBuilder: Request.Builder = original.newBuilder()
+                    .url(url)
+                val request: Request = requestBuilder.build()
+                return chain.proceed(request)
+            }
+        })
+        httpClientBuilder.addInterceptor(logging)
+        builderRegionsCovid.client(httpClientBuilder.build())
+        retrofit = builderRegionsCovid.build()
         return retrofit!!.create(serviceClass)
     }
 

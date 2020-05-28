@@ -45,5 +45,5 @@ interface CovirappService {
     fun updateStatus( @Body user : UserDto ) : Call<UsersResponseItem>
 
     @PUT("/covirapp/quiz/status/")
-    fun statusTest() : Call<ResponseBody>
+    fun statusTest( @Body quiz : QuizDto ) : Call<ResponseBody>
 }

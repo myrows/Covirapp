@@ -113,14 +113,14 @@ class TestActivity : AppCompatActivity() {
                     if ( response.isSuccessful )
                     Toast.makeText(this@TestActivity, "Gracias por realizar el test! 👏🏻" , Toast.LENGTH_LONG).show()
 
-                    var callTestUpdate : Call<ResponseBody> = service.statusTest()
+                    var callTestUpdate : Call<ResponseBody> = service.statusTest( test )
                     callTestUpdate.enqueue( object : Callback<ResponseBody> {
                         override fun onResponse(
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>
                         ) {
                             if ( response.isSuccessful ) {
-                                Toast.makeText(this@TestActivity, "Status actualizado" , Toast.LENGTH_LONG).show()
+                                Log.d("StatusUpodated", "Su status ha sido actualizado con éxito")
                             }
                         }
 

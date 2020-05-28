@@ -18,7 +18,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(userListFragment: UserResponseItemFragment)
     fun inject(usersResponse: ProvinceStatsActivity)
-    fun inject(paisesResponseItemFragment: PaisesResponseItemFragment)
     fun inject(countryFragment: CountryFragment)
     fun inject(graphicCountryResponse: CountryActivity)
 }
