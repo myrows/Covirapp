@@ -15,6 +15,7 @@ import com.example.covirapp.ui.account.MyAccountActivity
 import com.example.covirapp.R
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
+import com.example.covirapp.ui.account.DetectObjectActivity
 import com.example.covirapp.viewmodel.CovirappViewModel
 import javax.inject.Inject
 

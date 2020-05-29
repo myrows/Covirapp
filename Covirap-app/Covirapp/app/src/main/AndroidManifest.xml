@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -22,12 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.graphics.ProvinceActivity"></activity>
+        <activity android:name=".ui.account.DetectObjectActivity"></activity>
+        <activity android:name=".ui.graphics.ProvinceActivity" />
         <activity android:name=".ui.countries.CountryActivity" />
         <activity android:name=".ui.account.TestActivity" />
         <activity android:name=".ui.account.StatusActivity" />
         <activity android:name=".ui.account.MyAccountActivity" />
-        <activity android:name=".CountryActivity" />
         <activity android:name=".ui.provinceStats.ProvinceStatsActivity" />
         <activity android:name=".ui.users.RegionDetailActivity" />
         <activity android:name=".login.RegisterActivity" />

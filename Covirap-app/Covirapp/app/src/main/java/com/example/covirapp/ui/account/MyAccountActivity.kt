@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -128,4 +130,21 @@ class MyAccountActivity : AppCompatActivity() {
     }
 
     fun String.toEditable() : Editable = Editable.Factory.getInstance().newEditable(this)
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.account_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+
+        when (item.itemId) {
+            R.id.captureImageItem -> {
+                var goCapture = Intent( this@MyAccountActivity, DetectObjectActivity::class.java )
+                startActivity(goCapture )
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

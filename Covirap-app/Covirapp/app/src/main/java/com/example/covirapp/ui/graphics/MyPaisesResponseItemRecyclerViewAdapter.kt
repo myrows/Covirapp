@@ -66,7 +66,6 @@ class MyPaisesResponseItemRecyclerViewAdapter() : RecyclerView.Adapter<MyPaisesR
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val cPhoto : ImageView = mView.flagCountry
         val cTextCountry : TextView = mView.textCountry
     }
 }
