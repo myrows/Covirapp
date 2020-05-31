@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.cli.jvm.compiler.findMainClass
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {

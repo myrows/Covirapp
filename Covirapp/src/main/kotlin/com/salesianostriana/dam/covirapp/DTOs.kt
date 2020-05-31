@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.covirapp
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.salesianostriana.dam.covirapp.domain.Province
 import com.salesianostriana.dam.covirapp.domain.Quiz
 import com.salesianostriana.dam.covirapp.domain.Status
 import com.salesianostriana.dam.covirapp.domain.User
@@ -52,6 +53,22 @@ data class NuevoQuizDTO(
 )
 
 fun NuevoQuizDTO.toQuiz() = Quiz ( years, cough, neckPain, respiratoryPain, tasteLost, smellLost, fever, riskPerson, contactWithInfected, user, timeCreated, lastUpdated )
+
+data class ProvinceDTO(
+        val name : String,
+        val url : String,
+        val id : Long? = null
+)
+
+fun Province.toProvinceDTO() = ProvinceDTO ( name = name, url = url, id = id )
+fun ProvinceDTO.toProvince() = Province ( name = name, url = url, id = id )
+
+data class NuevoProvinceDTO (
+        val name : String,
+        val url : String
+)
+
+fun NuevoProvinceDTO.toProvince() = Province ( name = name, url = url )
 
 data class UserDTO(
         var username : String,

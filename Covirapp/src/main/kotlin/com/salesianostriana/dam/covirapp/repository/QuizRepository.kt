@@ -12,6 +12,11 @@ import java.util.*
 
 interface QuizRepository: JpaRepository<Quiz, Long> {
 
+    override fun findById(id : Long ) : Optional<Quiz>
+
     @Query("select q from Quiz q where q.user = :userAuthenticated")
     fun findQuizOfUser ( userAuthenticated : User ) : List<Quiz>
+
+    @Query("select q from Quiz q where q.id = :idFound")
+    fun findQuizs ( id : Long ) : List<Quiz>
 }

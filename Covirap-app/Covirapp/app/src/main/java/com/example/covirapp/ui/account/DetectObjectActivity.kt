@@ -2,7 +2,9 @@ package com.example.covirapp.ui.account
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -93,11 +95,11 @@ class DetectObjectActivity : AppCompatActivity() {
         //val detector = FirebaseVision.getInstance().getOnDeviceObjectDetector(options)
 
         // Specify the name you assigned in the Firebase console.
-        val remoteModel = FirebaseAutoMLRemoteModel.Builder("mascarilla_covirapp").build()
+        val remoteModel = FirebaseAutoMLRemoteModel.Builder("mascarilla_update").build()
 
         // Local model
         val localModel = FirebaseAutoMLLocalModel.Builder()
-            .setAssetFilePath("//android_asset/mascarilla/manifest.json")
+            .setAssetFilePath("file:///android_asset/mascarilla/manifest.json")
             .build()
 
         // Labeler
@@ -124,37 +126,15 @@ class DetectObjectActivity : AppCompatActivity() {
                     FirebaseVisionOnDeviceAutoMLImageLabelerOptions.Builder(localModel)
                 }
                 val options = optionsBuilder.setConfidenceThreshold(0.0f).build()
-                val labeler = FirebaseVision.getInstance().getOnDeviceAutoMLImageLabeler(options)
+                val labelerw = FirebaseVision.getInstance().getOnDeviceAutoMLImageLabeler(options)
 
-                labeler.processImage(image).addOnSuccessListener {
-                    Toast.makeText(baseContext, "La foto ha sido analizada con éxito",
-                        Toast.LENGTH_SHORT).show()
+                labelerw.processImage(image).addOnSuccessListener {
                     debugPrint(it)
                 }
                     .addOnFailureListener {
-                        Toast.makeText(baseContext, "Ha ocurrido un error con el análisis de fotos",
-                            Toast.LENGTH_SHORT).show()
+                        alertFail()
                     }
             }
-
-        /*detector.processImage(image)
-            .addOnSuccessListener {
-                // Task completed successfully
-                Toast.makeText(baseContext, "La foto ha sido analizada con éxito",
-                    Toast.LENGTH_SHORT).show()
-                val drawingView = DrawingView(
-                    getApplicationContext(),
-                    it
-                )
-                drawingView.draw(Canvas(bitmap))
-                runOnUiThread { imageViewMlKit.setImageBitmap(bitmap) }
-            }
-            .addOnFailureListener {
-                // Task failed with an exception
-                Toast.makeText(baseContext, "Ha ocurrido un error con el análisis de fotos",
-                    Toast.LENGTH_SHORT).show()
-            }
-         */
     }
 
     /**
@@ -201,23 +181,54 @@ class DetectObjectActivity : AppCompatActivity() {
 
     private fun debugPrint(visionObjects : List<FirebaseVisionImageLabel>) {
         val LOG_MOD = "MLKit-ODT"
-        for ((idx, obj) in visionObjects.withIndex()) {
 
-            if ( obj.text == "mascarilla" && obj.confidence > 0.80 ) {
-                Toast.makeText(
-                    baseContext, "Mascarilla colocada, gracias por colocártela",
-                    Toast.LENGTH_SHORT
-                ).show()
+        val objectDetected = visionObjects.get(0)
+            if ( objectDetected.text == "mascarilla" && objectDetected.confidence >= 0.55) {
+                alertSuccess()
             } else {
-                Toast.makeText(
-                    baseContext, "No se ha detectado ninguna mascarilla, por favor, colóquesela",
-                    Toast.LENGTH_SHORT
-                ).show()
+                alertError()
             }
-            Log.d(LOG_MOD, "Detected object: ${idx} ")
-            Log.d(LOG_MOD, "  Category: ${obj.entityId}")
-            Log.d(LOG_MOD, "  text: ${obj.text}")
-            Log.d(LOG_MOD, "  confidence: ${obj.confidence}")
+            Log.d(LOG_MOD, "  Category: ${objectDetected.entityId}")
+            Log.d(LOG_MOD, "  text: ${objectDetected.text}")
+            Log.d(LOG_MOD, "  confidence: ${objectDetected.confidence}")
+    }
+
+    private fun alertSuccess () {
+        val dialog  = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.custom_object_success, null)
+        dialog.setView(dialogView)
+        dialog.setCancelable(false)
+        dialog.setPositiveButton("Aceptar", { dialogInterface: DialogInterface, i: Int -> })
+        val customDialog = dialog.create()
+        customDialog.show()
+        customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            customDialog.dismiss()
+        }
+    }
+
+    private fun alertError () {
+        val dialog  = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.custom_object_error, null)
+        dialog.setView(dialogView)
+        dialog.setCancelable(false)
+        dialog.setPositiveButton("Aceptar", { dialogInterface: DialogInterface, i: Int -> })
+        val customDialog = dialog.create()
+        customDialog.show()
+        customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            customDialog.dismiss()
+        }
+    }
+
+    private fun alertFail () {
+        val dialog  = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.custom_object_fail, null)
+        dialog.setView(dialogView)
+        dialog.setCancelable(false)
+        dialog.setPositiveButton("Aceptar", { dialogInterface: DialogInterface, i: Int -> })
+        val customDialog = dialog.create()
+        customDialog.show()
+        customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            customDialog.dismiss()
         }
     }
 }

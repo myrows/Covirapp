@@ -31,6 +31,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.net.URI
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -53,6 +55,10 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        var pattern = "HH:mm:ss.SSS"
+        var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
+        var date: String = simpleDateFormat.format(Date())
 
         textIniciarSesion = findViewById(R.id.textViewIniciarSesion)
         btnRegister = findViewById(R.id.buttonRegister)
@@ -96,7 +102,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         val requestFile: RequestBody = RequestBody.create(getContentResolver().getType(uriSelected!!)?.toMediaTypeOrNull(), file)
 
-                        val body: MultipartBody.Part = MultipartBody.Part.createFormData("uploadfile", originalFileName, requestFile)
+                        val body: MultipartBody.Part = MultipartBody.Part.createFormData("uploadfile", "$date$originalFileName", requestFile)
 
                         val username: RequestBody = RequestBody.create(MultipartBody.FORM, edtName.getText().toString())
 

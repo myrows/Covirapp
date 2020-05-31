@@ -1,8 +1,10 @@
 package com.salesianostriana.dam.covirapp
 
+import com.salesianostriana.dam.covirapp.domain.Province
 import com.salesianostriana.dam.covirapp.domain.Quiz
 import com.salesianostriana.dam.covirapp.domain.Status
 import com.salesianostriana.dam.covirapp.domain.User
+import com.salesianostriana.dam.covirapp.repository.ProvinceRepository
 import com.salesianostriana.dam.covirapp.repository.QuizRepository
 import com.salesianostriana.dam.covirapp.repository.UserRepository
 import com.salesianostriana.dam.covirapp.service.FileStorage
@@ -25,7 +27,7 @@ import java.util.*
 @RestController
 @RequestMapping("/covirapp")
 class UserController ( val userRepository: UserRepository, val quizRepository: QuizRepository, val userService : UserCreateService,
-    val roleService : RoleService, val encoder: PasswordEncoder, val fileStorage: FileStorage) {
+                       val provinceRepository: ProvinceRepository, val roleService : RoleService, val encoder: PasswordEncoder, val fileStorage: FileStorage) {
 
     @GetMapping("/quiz")
     fun findAllQuiz() = quizRepository.findAll().map { it.toQuizDTO() }
@@ -49,6 +51,14 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
         riskPerson = quiz.riskPerson, user = userAuthenticated)
 
         return quizRepository.save( quizUpdated ).toQuizDTO()
+    }
+
+    @GetMapping("/province/{name}")
+    fun getProvinceByName( @PathVariable name : String ) = provinceRepository.findProvinceByname(name).toProvinceDTO()
+
+    @PostMapping("/province")
+    fun createProvince( @RequestBody province : NuevoProvinceDTO ) : Province {
+        return provinceRepository.save(NuevoProvinceDTO( province.name, province.url).toProvince())
     }
 
     @GetMapping("/user")

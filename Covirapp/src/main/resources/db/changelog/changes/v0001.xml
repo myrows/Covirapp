@@ -82,6 +82,18 @@
             </column>
         </createTable>
 
+        <createTable tableName="province">
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
         <createTable tableName="role">
             <column name="id" autoIncrement="true" type="BIGINT">
                 <constraints primaryKey="true"/>
