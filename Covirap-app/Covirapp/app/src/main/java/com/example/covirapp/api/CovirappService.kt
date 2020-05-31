@@ -46,4 +46,7 @@ interface CovirappService {
 
     @PUT("/covirapp/quiz/status/")
     fun statusTest( @Body quiz : QuizDto ) : Call<ResponseBody>
+
+    @GET("/covirapp/province/{name}")
+    fun getProvinceByName( @Path("name") name : String ) : Call<ProvinceDto>
 }

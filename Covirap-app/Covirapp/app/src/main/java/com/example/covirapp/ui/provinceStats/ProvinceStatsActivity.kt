@@ -7,11 +7,15 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.covirapp.R
 import androidx.lifecycle.Observer
 import coil.api.load
+import com.example.covirapp.api.CovirappService
+import com.example.covirapp.api.generator.ServiceGenerator
 import com.example.covirapp.common.Resource
 import com.example.covirapp.di.MyApplication
+import com.example.covirapp.models.ProvinceDto
 import com.example.covirapp.models.UsersResponseItem
 import com.example.covirapp.viewmodel.CovirappViewModel
 import com.github.mikephil.charting.charts.PieChart
@@ -20,6 +24,9 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.activity_province_stats.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import javax.inject.Inject
 
 class ProvinceStatsActivity : AppCompatActivity() {
@@ -44,6 +51,9 @@ class ProvinceStatsActivity : AppCompatActivity() {
         var numHealthy : Int = 0
         var numRecovered : Int = 0
 
+        var generate : ServiceGenerator = ServiceGenerator()
+        var service : CovirappService
+
 
         countryViewModel.usersProvince.observe(this, Observer { response ->
             when ( response ) {
@@ -55,7 +65,24 @@ class ProvinceStatsActivity : AppCompatActivity() {
 
                     setTitle(users.get(0).province)
 
-                    photoProvince.load("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Escudo_de_la_ciudad_de_Ja%C3%A9n.svg/1200px-Escudo_de_la_ciudad_de_Ja%C3%A9n.svg.png")
+                    service = generate.createServiceUser(CovirappService::class.java)
+
+                    // Se obtiene el url de la región que pertenece el usuario authenticated
+
+                    var call : Call<ProvinceDto> = service.getProvinceByName( users.get(0).province )
+                    call.enqueue( object : Callback<ProvinceDto> {
+                        override fun onResponse(
+                            call: Call<ProvinceDto>,
+                            response: Response<ProvinceDto>
+                        ) {
+                            if ( response.isSuccessful ) {
+                                photoProvince.load(response.body()?.url)
+                            }
+                        }
+                        override fun onFailure(call: Call<ProvinceDto>, t: Throwable) {
+                            Toast.makeText(this@ProvinceStatsActivity, "Error de conexión", Toast.LENGTH_LONG).show()
+                        }
+                    } )
 
                     Log.d("userSize", "${users.size}")
 
