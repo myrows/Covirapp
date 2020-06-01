@@ -8,6 +8,6 @@ Aplicación móvil creada sobre lenguaje Kotlin , esta app del Covid-19 proporci
 
 Cuenta de usuario : USUARIO - user PASSWORD - 12345678
 
-### El API lo puedes probar a través de estre enlace público de Poostman
+### El API lo puedes probar a través de este enlace público de Postman
 
 https://www.getpostman.com/collections/c8abfe0e5f3525b211a6
