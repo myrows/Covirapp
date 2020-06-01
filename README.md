@@ -11,3 +11,13 @@ Cuenta de usuario : USUARIO - user PASSWORD - 12345678
 ### El API lo puedes probar a través de este enlace público de Postman
 
 https://www.getpostman.com/collections/c8abfe0e5f3525b211a6
+
+## Tecnologías usada
+
+* Kotlin - Dagger2 - Coroutines
+* Android Studio
+* Intellij IDEA - Oauth 2.0
+* Patrón MVVM
+* Firebase - ML Kit - AutoML
+* Librería de terceros para análisis de datos en gráficas
+* Consume Apis externas de NovelCOVID, Narrativa, entre otras 
