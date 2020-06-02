@@ -6,7 +6,7 @@ Aplicación móvil creada sobre lenguaje Kotlin , esta app del Covid-19 proporci
 
 * Las últimas versiones están en la rama develop-android
 
-Cuenta de usuario : USUARIO - user PASSWORD - 12345678
+Cuenta de usuario : USUARIO - usuario PASSWORD - 12345678
 
 ### El API lo puedes probar a través de este enlace público de Postman
 
