@@ -1,7 +1,10 @@
 package com.example.covirapp.ui.radar
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -13,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable
+import com.example.covirapp.MainActivity
 import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
@@ -20,6 +24,8 @@ import com.example.covirapp.common.SharedPreferencesManager
 import com.example.covirapp.models.Ubicacion
 import com.example.covirapp.models.UsersResponse
 import com.example.covirapp.models.UsersResponseItem
+import com.example.covirapp.ui.account.DetectObjectActivity
+import com.example.covirapp.ui.account.MyAccountActivity
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationListener
@@ -55,6 +61,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
     lateinit var service : CovirappService
 
     lateinit var userStatus : String
+    var mascarillaFound : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,12 +80,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
 
         // User status
         userStatus = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("userStatus").toString()
+        mascarillaFound = SharedPreferencesManager.SharedPreferencesManager.getSomeBooleanValue("mascarillaFound")
 
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+
+            // Se comprueba que tiene mascarilla
+
+            if ( !mascarillaFound ) alertNotMask()
+
             ubication = LocationServices.getFusedLocationProviderClient(this)
             ubication.lastLocation.addOnSuccessListener {
                 giveMeYourUbication(it)
@@ -118,7 +131,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
             var latitud: Double = location.latitude
             var longitud: Double = location.longitude
 
-            var ub: Ubicacion = Ubicacion(userId, userStatus,false, latitud, longitud)
+            var ub: Ubicacion = Ubicacion(userId, userStatus, mascarillaFound, latitud, longitud)
 
             // Query para buscar aquellas ubicaciones existentes para el usuario authenticated
 
@@ -152,7 +165,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                                     map.put(key = "latitud", value = latitud)
                                     map.put(key = "longitud", value = longitud)
                                     map.put(key = "userStatus", value = userStatus)
-                                    map.put(key = "mascarilla", value = true)
+                                    map.put(key = "mascarilla", value = mascarillaFound)
                                     map.put(key = "userId", value = userId)
                                     db.collection("ubicaciones").document(document.id).update(map)
                                         .addOnSuccessListener {
@@ -235,7 +248,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                         var map = mutableMapOf<String, Any>()
                         map.put(key = "latitud", value = newLocation!!.latitude)
                         map.put(key = "longitud", value = newLocation!!.longitude)
-                        map.put(key = "mascarilla", value = true)
+                        map.put(key = "mascarilla", value = mascarillaFound)
                         map.put(key = "userId", value = userId)
                         db.collection("ubicaciones").document(document.id).update(map)
                             .addOnSuccessListener {
@@ -257,5 +270,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
             .addOnFailureListener { exception ->
                 Log.w("Query", "Error getting documents: ", exception)
             }
+    }
+
+    private fun alertNotMask () {
+        val dialog  = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.custom_object_map_error, null)
+        dialog.setView(dialogView)
+        dialog.setCancelable(false)
+        dialog.setPositiveButton("Aceptar", { dialogInterface: DialogInterface, i: Int -> })
+        val customDialog = dialog.create()
+        customDialog.show()
+        customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            var intentDetector = Intent( this@MapActivity, MainActivity::class.java )
+            startActivity( intentDetector )
+        }
     }
 }

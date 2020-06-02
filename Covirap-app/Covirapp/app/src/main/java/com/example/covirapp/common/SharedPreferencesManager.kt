@@ -31,12 +31,23 @@ class SharedPreferencesManager {
             editor.commit()
         }
 
+        fun setSomeBooleanValue(dataLabel: String?, dataValue: Boolean) {
+            val editor =
+                sharedPreferences.edit()
+            editor.putBoolean(dataLabel, dataValue)
+            editor.commit()
+        }
+
         fun getSomeIntValue(dataLabel: String?): Int {
             return sharedPreferences.getInt(dataLabel, 0)
         }
 
         fun getSomeStringValue(dataLabel: String?): String? {
             return sharedPreferences.getString(dataLabel, null)
+        }
+
+        fun getSomeBooleanValue(dataLabel: String?): Boolean {
+            return sharedPreferences.getBoolean(dataLabel, false)
         }
     }
 }

@@ -17,6 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.covirapp.R
+import com.example.covirapp.common.SharedPreferencesManager
 import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions
 import com.google.firebase.ml.common.modeldownload.FirebaseModelManager
 import com.google.firebase.ml.vision.FirebaseVision
@@ -184,6 +185,7 @@ class DetectObjectActivity : AppCompatActivity() {
         val objectDetected = visionObjects.get(0)
             if ( objectDetected.text == "mascarilla" && objectDetected.confidence >= 0.65) {
                 alertSuccess()
+                SharedPreferencesManager.SharedPreferencesManager.setSomeBooleanValue("mascarillaFound", true)
             } else {
                 alertError()
             }
