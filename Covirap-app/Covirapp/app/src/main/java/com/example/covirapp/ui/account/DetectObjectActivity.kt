@@ -10,10 +10,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.covirapp.R
@@ -86,6 +88,9 @@ class DetectObjectActivity : AppCompatActivity() {
     private fun runObjectDetection(bitmap: Bitmap) {
 
         val image = FirebaseVisionImage.fromBitmap(bitmap)
+
+        textViewTuSelifeYa.visibility = View.INVISIBLE
+        lottieArrowAnimation.visibility = View.INVISIBLE
 
         val options = FirebaseVisionObjectDetectorOptions.Builder()
             .setDetectorMode(FirebaseVisionObjectDetectorOptions.SINGLE_IMAGE_MODE)
