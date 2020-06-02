@@ -11,6 +11,7 @@ import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
 import com.example.covirapp.common.Constantes
+import com.example.covirapp.common.SharedPreferencesManager
 import com.example.covirapp.models.UserDto
 import com.example.covirapp.models.UsersResponseItem
 import kotlinx.android.synthetic.main.activity_register.*
@@ -74,6 +75,7 @@ class StatusActivity : AppCompatActivity() {
                 ) {
                     if ( response.isSuccessful ) {
                         Toast.makeText(this@StatusActivity, "Has actualizado tu estado con éxito", Toast.LENGTH_LONG).show()
+                        SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("status", statusSelected)
                     }
                 }
 

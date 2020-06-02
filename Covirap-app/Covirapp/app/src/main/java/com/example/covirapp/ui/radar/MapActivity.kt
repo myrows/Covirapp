@@ -60,17 +60,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
     var generator : ServiceGenerator = ServiceGenerator()
     lateinit var service : CovirappService
 
-    lateinit var userStatus : String
+    lateinit var userStats : String
     var mascarillaFound : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
         setTitle("Radar")
+
+        userStats = ""
+
+        // Instances Firebase y Location
         locationManager =
             getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        userId = SharedPreferencesManager.SharedPreferencesManager.getSomeIntValue("userId")
 
         db = FirebaseFirestore.getInstance()
         supportMapFragment =
@@ -78,9 +80,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
         supportMapFragment.getMapAsync(this)
         client = LocationServices.getFusedLocationProviderClient(this)
 
-        // User status
-        userStatus = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("userStatus").toString()
+        // Data of SharedPreferences
+
+        userId = SharedPreferencesManager.SharedPreferencesManager.getSomeIntValue("userId")
         mascarillaFound = SharedPreferencesManager.SharedPreferencesManager.getSomeBooleanValue("mascarillaFound")
+        userStats = SharedPreferencesManager.SharedPreferencesManager.getSomeStringValue("status").toString()
+
+        // Check permissions
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -88,13 +94,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
 
-            // Se comprueba que tiene mascarilla
-
+            // Check mask
             if ( !mascarillaFound ) alertNotMask()
 
             ubication = LocationServices.getFusedLocationProviderClient(this)
             ubication.lastLocation.addOnSuccessListener {
-                giveMeYourUbication(it)
+
+                if (it != null) {
+                    giveMeYourUbication(it)
+                }
                 addMarkers()
             }
         } else {
@@ -115,13 +123,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
-
     override fun onMapReady(googleMap: GoogleMap?) {
         mMap = googleMap!!
+
+        mMap.clear()
 
     }
 
@@ -131,7 +136,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
             var latitud: Double = location.latitude
             var longitud: Double = location.longitude
 
-            var ub: Ubicacion = Ubicacion(userId, userStatus, mascarillaFound, latitud, longitud)
+
+            var ub: Ubicacion = Ubicacion(userId, userStats, mascarillaFound, latitud, longitud)
 
             // Query para buscar aquellas ubicaciones existentes para el usuario authenticated
 
@@ -154,6 +160,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                     } else {
 
                         // Se edita la ubicación existente para el usuario authenticated
+
                         db.collection("ubicaciones")
                             .whereEqualTo("userId", userId)
                             .get()
@@ -161,10 +168,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                                 for (document in documents) {
                                     Log.d("Query", "${document.id} => ${document.data}")
 
+                                    Log.d("Status", "$userStats")
+
                                     var map = mutableMapOf<String, Any>()
                                     map.put(key = "latitud", value = latitud)
                                     map.put(key = "longitud", value = longitud)
-                                    map.put(key = "userStatus", value = userStatus)
+                                    map.put(key = "userStatus", value = userStats)
                                     map.put(key = "mascarilla", value = mascarillaFound)
                                     map.put(key = "userId", value = userId)
                                     db.collection("ubicaciones").document(document.id).update(map)
@@ -195,7 +204,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
     }
 
     fun addMarkers () {
-
         mMap.clear()
         supportMapFragment.getMapAsync {
 
@@ -249,6 +257,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener {
                         map.put(key = "latitud", value = newLocation!!.latitude)
                         map.put(key = "longitud", value = newLocation!!.longitude)
                         map.put(key = "mascarilla", value = mascarillaFound)
+                        map.put(key = "userStatus", value = userStats)
                         map.put(key = "userId", value = userId)
                         db.collection("ubicaciones").document(document.id).update(map)
                             .addOnSuccessListener {

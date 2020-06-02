@@ -41,12 +41,19 @@ class MyUserResponseItemRecyclerViewAdapter(): RecyclerView.Adapter<MyUserRespon
             transformations(CircleCropTransformation())
         }
 
-        if ( item.status == "SALUDABLE" ) {
-            holder.statusLottie.setAnimation(R.raw.ic_lottie_healthy)
-        } else if ( item.status == "ASINTOMATICO" ) {
-            holder.statusLottie.setAnimation(R.raw.ic_lottie_cases)
-        } else {
-            holder.statusLottie.setAnimation(R.raw.ic_lottie_infected)
+        when (item.status) {
+            "SALUDABLE" -> {
+                holder.statusLottie.setAnimation(R.raw.ic_lottie_healthy)
+            }
+            "ASINTOMATICO" -> {
+                holder.statusLottie.setAnimation(R.raw.ic_lottie_cases)
+            }
+            "INFECTADO" -> {
+                holder.statusLottie.setAnimation(R.raw.ic_lottie_infected)
+            }
+            else -> {
+                holder.statusLottie.setAnimation(R.raw.ic_lottie_recovered)
+            }
         }
 
         with(holder.mView) {

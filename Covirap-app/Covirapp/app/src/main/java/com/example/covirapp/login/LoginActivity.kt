@@ -85,7 +85,6 @@ class LoginActivity : AppCompatActivity() {
                                         override fun onResponse(call: Call<UsersResponseItem>, response: Response<UsersResponseItem>
                                         ) {
                                             SharedPreferencesManager.SharedPreferencesManager.setSomeIntValue("userId", response.body()!!.id)
-                                            SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("userStatus", response.body()!!.status)
                                         }
                                         override fun onFailure(
                                             call: Call<UsersResponseItem>,
