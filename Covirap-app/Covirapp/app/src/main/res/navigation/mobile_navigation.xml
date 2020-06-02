@@ -11,11 +11,10 @@
         android:label="@string/title_users"
         tools:layout="@layout/fragment_user_response_item_list" />
 
-    <fragment
+    <activity
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.covirapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_maps"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.example.covirapp.ui.radar.MapActivity"
+        android:label="@string/title_maps" />
 
     <fragment
         android:id="@+id/navigation_notifications"

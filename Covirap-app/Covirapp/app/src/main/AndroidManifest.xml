@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".di.MyApplication"
@@ -21,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.account.DetectObjectActivity"></activity>
+        <activity android:name=".ui.radar.MapActivity"></activity>
+        <activity android:name=".ui.account.DetectObjectActivity" />
         <activity android:name=".ui.graphics.ProvinceActivity" />
         <activity android:name=".ui.countries.CountryActivity" />
         <activity android:name=".ui.account.TestActivity" />
@@ -44,6 +47,10 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDjnfQcWTvXrDf3-y-r8VPpFrpXtdNNnmg" />
     </application>
 
 </manifest>

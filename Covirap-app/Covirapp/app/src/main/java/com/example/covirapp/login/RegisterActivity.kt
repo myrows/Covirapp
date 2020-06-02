@@ -16,11 +16,20 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import coil.api.load
 import coil.transform.CircleCropTransformation
 import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
+import com.example.covirapp.common.SharedPreferencesManager
+import com.example.covirapp.di.MyApplication
+import com.example.covirapp.models.Ubicacion
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_register.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -30,7 +39,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,10 +59,16 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var imgRegister : ImageView
     lateinit var file : File
     lateinit var provinceSelected : String
+    lateinit var ubication : FusedLocationProviderClient
+    lateinit var database : FirebaseDatabase
+    lateinit var refUbication : DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        database = FirebaseDatabase.getInstance()
+        refUbication = database.getReference("ubicacion")
 
         var pattern = "HH:mm:ss.SSS"
         var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
