@@ -45,10 +45,6 @@ class DetectObjectActivity : AppCompatActivity() {
         /**
          *  Training my own model mascarilla
          */
-
-
-
-        captureImageFab.setOnClickListener {
             val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if ( takePhotoIntent.resolveActivity(packageManager) != null ) {
                 val values = ContentValues()
@@ -58,7 +54,7 @@ class DetectObjectActivity : AppCompatActivity() {
                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri)
                 startActivityForResult(takePhotoIntent, ODT_REQUEST_IMAGE_CAPTURE)
             }
-        }
+
 
         if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED ) {
@@ -183,7 +179,7 @@ class DetectObjectActivity : AppCompatActivity() {
         val LOG_MOD = "MLKit-ODT"
 
         val objectDetected = visionObjects.get(0)
-            if ( objectDetected.text == "mascarilla" && objectDetected.confidence >= 0.55) {
+            if ( objectDetected.text == "mascarilla" && objectDetected.confidence >= 0.65) {
                 alertSuccess()
             } else {
                 alertError()
