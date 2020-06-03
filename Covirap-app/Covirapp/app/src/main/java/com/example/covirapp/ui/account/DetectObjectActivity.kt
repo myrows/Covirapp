@@ -191,6 +191,7 @@ class DetectObjectActivity : AppCompatActivity() {
             if ( objectDetected.text == "mascarilla" && objectDetected.confidence >= 0.65) {
                 alertSuccess()
                 SharedPreferencesManager.SharedPreferencesManager.setSomeBooleanValue("mascarillaFound", true)
+                onBackPressed()
             } else {
                 alertError()
             }

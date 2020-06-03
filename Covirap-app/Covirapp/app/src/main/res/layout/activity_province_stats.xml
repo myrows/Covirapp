@@ -60,6 +60,7 @@
             android:layout_width="120dp"
             android:layout_height="150dp"
             android:layout_margin="12dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="32dp"
             android:elevation="20dp"
             app:cardCornerRadius="12dp"
@@ -75,11 +76,12 @@
                     android:id="@+id/lottieStatusP3"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="30dp"
                     app:layout_constraintBottom_toBottomOf="parent"
 
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewP3"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/ic_lottie_infected" />
@@ -100,106 +102,138 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
+                    android:text="Confirmados"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lottieStatusP3" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewP4"
-        android:layout_width="120dp"
-        android:layout_height="150dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardViewP3"
-        app:layout_constraintEnd_toStartOf="@+id/cardViewP5"
-        app:layout_constraintStart_toEndOf="@+id/cardViewP3"
-        app:layout_constraintTop_toTopOf="@+id/cardViewP3"
-        app:cardCornerRadius="12dp"
-        android:elevation="20dp" >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewP4"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+            android:elevation="20dp"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardViewP3"
+            app:layout_constraintEnd_toStartOf="@+id/cardViewP5"
+            app:layout_constraintStart_toEndOf="@+id/cardViewP3"
+            app:layout_constraintTop_toTopOf="@+id/cardViewP3">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieStatusP4"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieStatusP4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/ic_lottie_healthy" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewP4"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/ic_lottie_healthy" />
 
-            <TextView
-                android:id="@+id/textViewP4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/textViewP4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
+                    android:text="Saludables"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lottieStatusP4" />
 
-    </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewP5"
-        android:layout_width="120dp"
-        android:layout_height="150dp"
-        android:layout_marginRight="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardViewP4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cardViewP4"
-        app:layout_constraintVertical_bias="0.0"
-        app:cardCornerRadius="12dp"
-        android:elevation="20dp" >
+        </androidx.cardview.widget.CardView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewP5"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cardViewP4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cardViewP4"
+            app:layout_constraintVertical_bias="0.0"
+            app:cardCornerRadius="12dp"
+            android:elevation="20dp" >
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieStatusP5"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/ic_lottie_recovered" />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieStatusP5"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
 
-            <TextView
-                android:id="@+id/textViewP5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginBottom="30dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewP5"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/ic_lottie_recovered" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textViewP5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans"
+                    android:text="Recuperados"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lottieStatusP5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChartProvince"
