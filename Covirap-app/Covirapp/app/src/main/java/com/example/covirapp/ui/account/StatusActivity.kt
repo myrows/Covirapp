@@ -16,6 +16,10 @@ import com.example.covirapp.models.UserDto
 import com.example.covirapp.models.UsersResponseItem
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_status.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +32,7 @@ class StatusActivity : AppCompatActivity() {
 
         setTitle("Mi estado")
 
+        lottieSuccessStatus.visibility = View.INVISIBLE
         var testUser : TextView = textViewStatus
         var getUser = intent.extras?.get("nameUser")
         var statusSelected : String = ""
@@ -74,9 +79,14 @@ class StatusActivity : AppCompatActivity() {
                     response: Response<UsersResponseItem>
                 ) {
                     if ( response.isSuccessful ) {
-                        Toast.makeText(this@StatusActivity, "Has actualizado tu estado con éxito", Toast.LENGTH_LONG).show()
                         SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("status", statusSelected)
-                        onBackPressed()
+                        lottieSuccessStatus.visibility = View.VISIBLE
+                        lottieSuccessStatus.playAnimation()
+
+                        GlobalScope.launch(context = Dispatchers.Main) {
+                            delay(2000)
+                            onBackPressed()
+                        }
                     }
                 }
 

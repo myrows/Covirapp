@@ -3,15 +3,23 @@ package com.example.covirapp.ui.account
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
+import android.view.View
 import android.widget.*
 import android.widget.CompoundButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import com.example.covirapp.R
 import com.example.covirapp.api.CovirappService
 import com.example.covirapp.api.generator.ServiceGenerator
 import com.example.covirapp.models.QuizDto
 import com.example.covirapp.models.QuizResponse
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_my_account.*
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +48,7 @@ class TestActivity : AppCompatActivity() {
     var isContactWithInfected : Boolean = false
     var isRiskPerson : Boolean = false
     lateinit var textFever : TextView
+    lateinit var nestedView : NestedScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +56,7 @@ class TestActivity : AppCompatActivity() {
 
         setTitle("Test Covid-19")
 
+        nestedView = findViewById(R.id.nestedTestScrollView)
         tYears = findViewById(R.id.txtYears)
         sFever = findViewById(R.id.switchFever)
         sRespiratoryPain = findViewById(R.id.switchRespiratoryPain)
@@ -110,8 +120,15 @@ class TestActivity : AppCompatActivity() {
                     call: Call<QuizResponse>,
                     response: Response<QuizResponse>
                 ) {
-                    if ( response.isSuccessful )
-                    Toast.makeText(this@TestActivity, "Gracias por realizar el test! 👏🏻" , Toast.LENGTH_LONG).show()
+                    if ( response.isSuccessful ) {
+                        Toast.makeText(
+                            this@TestActivity,
+                            "Gracias por realizar el test! 👏🏻",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        onBackPressed()
+                    }
 
                     var callTestUpdate : Call<ResponseBody> = service.statusTest( test )
                     callTestUpdate.enqueue( object : Callback<ResponseBody> {
