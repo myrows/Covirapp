@@ -76,6 +76,7 @@ class StatusActivity : AppCompatActivity() {
                     if ( response.isSuccessful ) {
                         Toast.makeText(this@StatusActivity, "Has actualizado tu estado con éxito", Toast.LENGTH_LONG).show()
                         SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("status", statusSelected)
+                        onBackPressed()
                     }
                 }
 
