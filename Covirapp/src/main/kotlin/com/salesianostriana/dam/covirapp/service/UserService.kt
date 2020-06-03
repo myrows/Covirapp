@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.covirapp.service
 
-import com.salesianostriana.dam.covirapp.entities.User
+import com.salesianostriana.dam.covirapp.domain.User
 import java.util.*
 
 interface UserService {

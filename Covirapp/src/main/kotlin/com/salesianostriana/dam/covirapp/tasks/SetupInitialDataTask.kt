@@ -1,6 +1,9 @@
 package com.salesianostriana.dam.covirapp.tasks
 
-import com.salesianostriana.dam.covirapp.entities.*
+import com.salesianostriana.dam.covirapp.domain.Permission
+import com.salesianostriana.dam.covirapp.domain.Role
+import com.salesianostriana.dam.covirapp.domain.Status
+import com.salesianostriana.dam.covirapp.domain.User
 import com.salesianostriana.dam.covirapp.service.PermissionService
 import com.salesianostriana.dam.covirapp.service.RoleService
 import com.salesianostriana.dam.covirapp.service.UserService
@@ -17,7 +20,6 @@ class SetupUserDataTask(
 ) : ApplicationListener<ContextRefreshedEvent> {
     private var alreadySetup = false
 
-    @Transactional
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         if (alreadySetup) return
         alreadySetup = true
@@ -28,11 +30,10 @@ class SetupUserDataTask(
         val adminRole = createRoleIfNotFound("ROLE_ADMIN", hashSetOf(readPermission, writePermission))
         val userRole = createRoleIfNotFound("ROLE_USER", hashSetOf(readPermission))
 
-        createUserIfNotFound("user", "12345678", "My user", "Sevilla", Status.SALUDABLE, null, hashSetOf(userRole))
-        createUserIfNotFound("admin", "12345678", "My admin", "Jaén", Status.SALUDABLE, null, hashSetOf(userRole, adminRole))
+        createUserIfNotFound("user1", "abcd1234", "ashdgj", "Jaén", Status.SALUDABLE,  hashSetOf(adminRole, userRole))
+        createUserIfNotFound("user2", "12345678", "ashdgj", "Barcelona", Status.SALUDABLE, hashSetOf(userRole))
     }
 
-    @Transactional
     fun createPermissionIfNotFound(name: String): Permission {
         val permission = Permission(name = name)
         var retrieval = permissionService.tryCreate(permission)
@@ -41,7 +42,7 @@ class SetupUserDataTask(
         return retrieval.get()
     }
 
-    @Transactional
+
     fun createRoleIfNotFound(name: String, permissions: Set<Permission>): Role {
         val role = Role(name = name, permissions = permissions)
         var retrieval = roleService.tryCreate(role)
@@ -50,9 +51,9 @@ class SetupUserDataTask(
         return retrieval.get()
     }
 
-    @Transactional
-    fun createUserIfNotFound(username: String, password: String, fullName : String, province : String, status : Status, quiz : Quiz?, roles: Set<Role>): User {
-        val user = User(username = username, password = password, fullName = fullName,  province = province, status = status, quiz = quiz,  roles = roles)
+
+    fun createUserIfNotFound(username: String, password: String, fullName : String, province : String, status : Status, roles: Set<Role>): User {
+        val user = User(username = username, password = password, fullName = fullName, province = province, status = status, roles = roles)
         var retrieval = userService.tryCreate(user)
         if (!retrieval.isPresent)
             retrieval = userService.findByUsername(username)

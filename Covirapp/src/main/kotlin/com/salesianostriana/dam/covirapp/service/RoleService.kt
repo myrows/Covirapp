@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.covirapp.service
 
-import com.salesianostriana.dam.covirapp.entities.Role
+import com.salesianostriana.dam.covirapp.domain.Role
 import java.util.*
 
 interface RoleService {

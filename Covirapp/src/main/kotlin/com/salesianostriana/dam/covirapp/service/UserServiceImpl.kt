@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.covirapp.service
 
-import com.salesianostriana.dam.covirapp.entities.User
+import com.salesianostriana.dam.covirapp.domain.User
 import com.salesianostriana.dam.covirapp.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service

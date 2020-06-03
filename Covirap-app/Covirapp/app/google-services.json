@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "775712119063",
+    "firebase_url": "https://covirapp-3cc8e.firebaseio.com",
+    "project_id": "covirapp-3cc8e",
+    "storage_bucket": "covirapp-3cc8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775712119063:android:f4a6aeec4ee4202dfe7f52",
+        "android_client_info": {
+          "package_name": "com.example.covirapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775712119063-ah12vobajn1oq9jsaad9l849rmjrn4ba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHhSv5YyIWUcK87Yj5gOjhuf8fcXE8ciw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775712119063-ah12vobajn1oq9jsaad9l849rmjrn4ba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

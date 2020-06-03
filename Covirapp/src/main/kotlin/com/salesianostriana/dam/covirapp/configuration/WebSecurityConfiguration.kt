@@ -5,15 +5,16 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+
 
 @Configuration
 @EnableWebSecurity
@@ -28,17 +29,19 @@ class WebSecurityConfiguration(
         auth.userDetailsService(userDetailsService)
     }
 
+    @Throws(Exception::class)
+    override fun configure(webSecurity: WebSecurity) {
+        webSecurity.ignoring().antMatchers("/user")
+        webSecurity.ignoring().antMatchers("/files/**")
+    }
+
     override fun configure(http: HttpSecurity) {
         // @formatter:off
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.POST,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.PUT,"/covirapp/**").hasRole("ROLE_USER")
-                .antMatchers(HttpMethod.DELETE,"/covirapp/**").hasRole("ROLE_USER")
-                .anyRequest().hasRole("ROLE_ADMIN")
-                .anyRequest().authenticated()
+                .antMatchers("/covirapp/user").permitAll()
+                .antMatchers("/covirapp/files/**").permitAll()
+                .anyRequest().authenticated();
         // @formatter:on
     }
 

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.RegisterActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="24dp">
+
+        <ImageView
+            android:id="@+id/imageCircle"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_round_circle"></ImageView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewR4"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewR">
+
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:scrollbarSize="4dp"
+                app:layout_constraintVertical_bias="0.139" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewR3"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="60dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageCircle">
+
+            <EditText
+                android:id="@+id/editTextUsernameR"
+                android:layout_width="303dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Usuario"
+                android:inputType="textPersonName"
+                android:scrollbarSize="4dp"
+                app:layout_constraintVertical_bias="0.139" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewR"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewR3">
+
+            <EditText
+                android:id="@+id/editFullName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Nombre y Apellidos"
+                android:inputType="textPersonName"
+                android:scrollbarSize="4dp"
+                app:layout_constraintVertical_bias="0.139" />
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/custom_button"
+            android:text="Registrarse"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/spinnerProvince"
+            app:layout_constraintStart_toStartOf="@+id/spinnerProvince"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerProvince" />
+
+        <TextView
+            android:id="@+id/textViewTecnico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="12dp"
+            android:gravity="left"
+            android:text="¿Eres usuario?"
+            android:textColor="@android:color/background_light"
+            app:layout_constraintStart_toStartOf="@+id/buttonRegister"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
+
+        <TextView
+            android:id="@+id/textViewIniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Iniciar Sesión"
+            android:textColor="#009EFD"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewTecnico"
+            app:layout_constraintStart_toEndOf="@+id/textViewTecnico"
+            app:layout_constraintTop_toTopOf="@+id/textViewTecnico" />
+
+        <ImageView
+            android:id="@+id/imageViewRegister"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/ic_add_avatar"
+            app:layout_constraintBottom_toBottomOf="@+id/imageCircle"
+            app:layout_constraintEnd_toEndOf="@+id/imageCircle"
+            app:layout_constraintStart_toStartOf="@+id/imageCircle"
+            app:layout_constraintTop_toTopOf="@+id/imageCircle" />
+
+        <Spinner
+            android:id="@+id/spinnerProvince"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="@+id/cardViewR4"
+            app:layout_constraintStart_toStartOf="@+id/cardViewR4"
+            app:layout_constraintTop_toBottomOf="@+id/cardViewR4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
