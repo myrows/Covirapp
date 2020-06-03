@@ -8,6 +8,7 @@ import android.text.InputType
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -22,6 +23,12 @@ import com.example.covirapp.common.Constantes
 import com.example.covirapp.models.UserDto
 import com.example.covirapp.models.UsersResponseItem
 import com.example.covirapp.ui.provinceStats.ProvinceStatsActivity
+import kotlinx.android.synthetic.main.activity_my_account.*
+import kotlinx.android.synthetic.main.activity_status.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +41,8 @@ class MyAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_my_account)
 
         setTitle("Mi perfil")
+
+        perfilAccountSuccess.visibility = View.INVISIBLE
 
         var edUsername : EditText = findViewById(R.id.editTextMyAccountUsername)
         var edFullName : EditText = findViewById(R.id.editTextMyAccountFullName)
@@ -101,7 +110,12 @@ class MyAccountActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    Toast.makeText(this@MyAccountActivity, "Perfil editado con éxito", Toast.LENGTH_LONG).show()
+                    perfilAccountSuccess.visibility = View.VISIBLE
+                    perfilAccountSuccess.playAnimation()
+
+                    GlobalScope.launch(context = Dispatchers.Main) {
+                        delay(2000)
+                    }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
