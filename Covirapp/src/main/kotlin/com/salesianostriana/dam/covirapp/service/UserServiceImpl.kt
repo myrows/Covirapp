@@ -21,4 +21,18 @@ class UserServiceImpl(
 
     @Transactional
     override fun findByUsername(username: String) = repo.findByUsername(username)
+
+    @Transactional
+    override fun findUsersWithSameProvince(province: String): List<User> = repo.findUsersWithSameProvince( province )
+
+    @Transactional
+    override fun findAll(): List<User> = repo.findAll()
+
+    @Transactional
+    override fun findById(id: Long): Optional<User> = repo.findById( id )
+
+    @Transactional
+    override fun deleteById(id: Long) = repo.deleteById( id )
+
+
 }

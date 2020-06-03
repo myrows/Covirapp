@@ -7,9 +7,7 @@ import com.salesianostriana.dam.covirapp.domain.User
 import com.salesianostriana.dam.covirapp.repository.ProvinceRepository
 import com.salesianostriana.dam.covirapp.repository.QuizRepository
 import com.salesianostriana.dam.covirapp.repository.UserRepository
-import com.salesianostriana.dam.covirapp.service.FileStorage
-import com.salesianostriana.dam.covirapp.service.RoleService
-import com.salesianostriana.dam.covirapp.service.UserCreateService
+import com.salesianostriana.dam.covirapp.service.*
 import org.apache.coyote.Response
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -26,31 +24,31 @@ import java.util.*
 
 @RestController
 @RequestMapping("/covirapp")
-class UserController ( val userRepository: UserRepository, val quizRepository: QuizRepository, val userService : UserCreateService,
-                       val provinceRepository: ProvinceRepository, val roleService : RoleService, val encoder: PasswordEncoder, val fileStorage: FileStorage) {
+class UserController (val userService: UserService, val quizService: QuizService, val userCreateService : UserCreateService,
+                      val provinceRepository: ProvinceRepository, val roleService : RoleService, val encoder: PasswordEncoder, val fileStorage: FileStorage) {
 
     @GetMapping("/quiz")
-    fun findAllQuiz() = quizRepository.findAll().map { it.toQuizDTO() }
+    fun findAllQuiz() = quizService.findAll().map { it.toQuizDTO() }
 
     @PostMapping("/quiz")
     fun createQuiz( @RequestBody quiz : NuevoQuizDTO, @AuthenticationPrincipal user : User ) : Quiz {
-        return quizRepository.save(NuevoQuizDTO( quiz.years, quiz.cough, quiz.neckPain, quiz.respiratoryPain, quiz.tasteLost, quiz.smellLost, quiz.fever,
+        return quizService.save(NuevoQuizDTO( quiz.years, quiz.cough, quiz.neckPain, quiz.respiratoryPain, quiz.tasteLost, quiz.smellLost, quiz.fever,
         quiz.riskPerson, quiz.contactWithInfected, user).toQuiz())
     }
 
     @PutMapping("/quiz/{userAuthenticated}")
     fun editQuiz( @RequestBody quiz : NuevoQuizDTO, @AuthenticationPrincipal userAuthenticated : User ) : QuizDTO {
-        var sizeOfHistoyQuiz = quizRepository.findQuizOfUser( userAuthenticated ).size
+        var sizeOfHistoyQuiz = quizService.findQuizOfUser( userAuthenticated ).size
 
         if ( sizeOfHistoyQuiz < 0 )
             ResponseStatusException(HttpStatus.NOT_FOUND, "No se ha encontrado resultados")
 
-        var lastQuizDone = quizRepository.findQuizOfUser( userAuthenticated ).get(sizeOfHistoyQuiz - 1)
+        var lastQuizDone = quizService.findQuizOfUser( userAuthenticated ).get(sizeOfHistoyQuiz - 1)
         var quizUpdated : Quiz = lastQuizDone.copy( years = quiz.years, cough = quiz.cough, neckPain = quiz.neckPain,
         respiratoryPain = quiz.respiratoryPain, tasteLost = quiz.tasteLost, smellLost = quiz.smellLost, fever = quiz.fever,
         riskPerson = quiz.riskPerson, user = userAuthenticated)
 
-        return quizRepository.save( quizUpdated ).toQuizDTO()
+        return quizService.save( quizUpdated ).toQuizDTO()
     }
 
     @GetMapping("/province/{name}")
@@ -62,7 +60,7 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     }
 
     @GetMapping("/user")
-    fun getAllUsers() = userRepository.findAll().map { it.toUserDTO() }
+    fun getAllUsers() = userService.findAll().map { it.toUserDTO() }
 
     @GetMapping("/user/me")
     fun getUserInformation( @AuthenticationPrincipal user: User ) : UserDTO {
@@ -70,11 +68,11 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     }
 
     @GetMapping("/user/me/province")
-    fun getAllUsersForProvince (@AuthenticationPrincipal user : User) = userRepository.findUsersWithSameProvince( user.province ).map { it.toUserDTO() }
+    fun getAllUsersForProvince (@AuthenticationPrincipal user : User) = userService.findUsersWithSameProvince( user.province ).map { it.toUserDTO() }
 
     @GetMapping("/user/me/avatar/{id}")
     fun getUserAvatar ( @PathVariable id : Long ) : ResponseEntity<Resource>{
-      var userFound : User = userRepository.findById( id ).get()
+      var userFound : User = userService.findById( id ).get()
         val file = fileStorage.loadFile(userFound.avatar)
 
         return ResponseEntity.ok()
@@ -86,28 +84,28 @@ class UserController ( val userRepository: UserRepository, val quizRepository: Q
     fun createUserWithAvatar( @RequestParam("username") username : String, @RequestParam("password") password : String,
                               @RequestParam("fullName") fullName : String, @RequestParam("province") province : String,
                               @RequestParam("uploadfile") file: MultipartFile) : ResponseEntity<UserDTO> =
-            userService.create(username, password, fullName, province, file, roleService.findByName("ROLE_USER").get()).map { ResponseEntity.status(HttpStatus.CREATED).body(it.toUserDTO()) }.orElseThrow {
+            userCreateService.create(username, password, fullName, province, file, roleService.findByName("ROLE_USER").get()).map { ResponseEntity.status(HttpStatus.CREATED).body(it.toUserDTO()) }.orElseThrow {
                 ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de  usuario $username ya existe")
             }
 
     @PutMapping("/user/{id}")
     fun editUser( @RequestBody user : CreateUserDTO, @PathVariable id: Long ) :UserDTO {
-        return userService.edit( user, userRepository.findById( id ).get() )
+        return userCreateService.edit( user, userService.findById( id ).get() )
     }
 
     @PutMapping("/quiz/status/")
     fun editStatusUser( @RequestBody quiz : NuevoQuizDTO, @AuthenticationPrincipal user: User ) :UserDTO {
-        return userService.testStatus( quiz, user )
+        return userCreateService.testStatus( quiz, user )
     }
 
     @PutMapping("/user/me/status")
     fun updateStatus( @RequestBody user : CreateUserDTO, @AuthenticationPrincipal userAuthenticated: User ) : UserDTO {
-        return userService.updateStatus( user, userAuthenticated )
+        return userCreateService.updateStatus( user, userAuthenticated )
     }
 
     @DeleteMapping("/user/{id}")
     fun deleteAccount( @PathVariable id : Long ) : ResponseEntity<Void> {
-        userRepository.deleteById( id )
+        userService.deleteById( id )
         return ResponseEntity.noContent().build()
     }
 
