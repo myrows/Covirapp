@@ -1,4 +1,4 @@
-# Covirapp
+# Covirapp :chart_with_upwards_trend: :satellite: :camera: :iphone:
 
 Aplicación móvil creada sobre lenguaje Kotlin , esta app del Covid-19 proporciona información de varias fuentes oficiales con datos de interés, consume también de una Api creada en Kotlin con el IDE Intellij IDEA y entres sus funciones , la más destacada es la detección de mascarilla en el rostro facial gracias al aprendizaje automático de AutoML
 
