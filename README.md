@@ -19,5 +19,6 @@ https://www.getpostman.com/collections/c8abfe0e5f3525b211a6
 * Firebase - ML Kit - AutoML
 * Cloud Firestore
 * Coil
+* Android Map SDK
 * Librería de terceros para análisis de datos en gráficas
 * Consume Apis externas de NovelCOVID, Narrativa, entre otras 
