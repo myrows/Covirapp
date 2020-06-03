@@ -23,4 +23,5 @@ https://www.getpostman.com/collections/c8abfe0e5f3525b211a6
 * Librería de terceros para análisis de datos en gráficas
 * Consume Apis externas de NovelCOVID, Narrativa, entre otras
 * PostgreSQL
+* Liquibase
 * AWS EC2 y S3
