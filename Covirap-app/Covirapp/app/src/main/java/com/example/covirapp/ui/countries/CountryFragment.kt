@@ -1,14 +1,15 @@
 package com.example.covirapp.ui.countries
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.covirapp.R
@@ -24,10 +25,13 @@ class CountryFragment : Fragment() {
     private var columnCount = 2
     lateinit var listaCountries : MutableList<CountryResponseItem>
 
+    lateinit var searchView : SearchView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (activity?.applicationContext as MyApplication).appComponent.inject(this)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -66,5 +70,26 @@ class CountryFragment : Fragment() {
             }
         })
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.country_search_menu, menu)
+
+        var searchItem : MenuItem = menu.findItem(R.id.searchCountry)
+        var searchView : SearchView = searchItem.actionView as SearchView
+
+        searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                countryAdapter.filter.filter(newText)
+                return false
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

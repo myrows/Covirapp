@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import coil.api.load
@@ -21,10 +23,11 @@ import kotlinx.android.synthetic.main.fragment_country.view.*
 import java.util.ArrayList
 
 class MyCountryRecyclerViewAdapter(
-) : RecyclerView.Adapter<MyCountryRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyCountryRecyclerViewAdapter.ViewHolder>(), Filterable {
 
     private val mOnClickListener: View.OnClickListener
-    private var countries: List<CountryResponseItem> = ArrayList()
+    private var countries: MutableList<CountryResponseItem> = mutableListOf()
+    var filteredListCountries: MutableList<CountryResponseItem> = mutableListOf()
     lateinit var ctx : Context
 
     init {
@@ -73,13 +76,47 @@ class MyCountryRecyclerViewAdapter(
     override fun getItemCount(): Int = countries.size
 
     fun setData( listCountries : List<CountryResponseItem>) {
-        countries = listCountries
+        countries.addAll(listCountries)
+        filteredListCountries.addAll(countries)
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         var cPhoto : ImageView = mView.findViewById(R.id.imageViewCountryApiCovid)
         var cTextCountry : TextView = mView.findViewById(R.id.textViewCountryApi)
+
+    }
+
+    override fun getFilter(): Filter {
+        return exampleFilter
+    }
+
+    var exampleFilter : Filter = object : Filter() {
+
+        override fun performFiltering(constraint: CharSequence): FilterResults {
+
+            var filteredList: MutableList<CountryResponseItem> = mutableListOf()
+
+            if (constraint.toString().isEmpty()) {
+                filteredList.addAll(filteredListCountries)
+            } else {
+                for ( c in filteredListCountries ) {
+                    if ( c.country.toLowerCase().contains(constraint.toString().toLowerCase()) ) {
+                        filteredList.add( c )
+                    }
+                }
+            }
+            var results : FilterResults = FilterResults()
+            results.values = filteredList
+
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence, results: FilterResults) {
+            countries.clear()
+            countries.addAll(results.values as Collection<CountryResponseItem>)
+            notifyDataSetChanged()
+        }
 
     }
 }

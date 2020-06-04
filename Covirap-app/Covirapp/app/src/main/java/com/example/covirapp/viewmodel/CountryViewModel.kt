@@ -21,7 +21,7 @@ class CountryViewModel @Inject constructor( private val countryRepository: Count
 
     fun getCountries() = viewModelScope.launch {
         countryApi.value = Resource.Loading()
-        delay(2000)
+        delay(1000)
         val response = countryRepository.getCountry()
         countryApi.value = handleCountriesCovirapp( response )
     }
