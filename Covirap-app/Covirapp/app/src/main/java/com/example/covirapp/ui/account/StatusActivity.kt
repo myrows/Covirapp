@@ -14,6 +14,7 @@ import com.example.covirapp.common.Constantes
 import com.example.covirapp.common.SharedPreferencesManager
 import com.example.covirapp.models.UserDto
 import com.example.covirapp.models.UsersResponseItem
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.activity_status.*
 import kotlinx.coroutines.Dispatchers
@@ -26,11 +27,17 @@ import retrofit2.Response
 
 class StatusActivity : AppCompatActivity() {
 
+    var userId : Int = 0
+    lateinit var db: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status)
 
         setTitle("Mi estado")
+
+        userId = SharedPreferencesManager.SharedPreferencesManager.getSomeIntValue("userId")
+        db = FirebaseFirestore.getInstance()
 
         lottieSuccessStatus.visibility = View.INVISIBLE
         var testUser : TextView = textViewStatus
@@ -80,6 +87,35 @@ class StatusActivity : AppCompatActivity() {
                 ) {
                     if ( response.isSuccessful ) {
                         SharedPreferencesManager.SharedPreferencesManager.setSomeStringValue("status", statusSelected)
+
+                        // Update user status in map
+                        db.collection("ubicaciones")
+                            .whereEqualTo("userId", userId)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                for (document in documents) {
+
+                                    var map = mutableMapOf<String, Any>()
+                                    map.put(key = "userStatus", value = statusSelected)
+                                    db.collection("ubicaciones").document(document.id).update(map)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "Update",
+                                                "Se ha actualizado los datos correctamente"
+                                            )
+
+                                        }.addOnFailureListener {
+                                            Log.d(
+                                                "Update",
+                                                "Ha ocurrido un error al actualizar el documento"
+                                            )
+                                        }
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w("Query", "Error getting documents: ", exception)
+                            }
+
                         lottieSuccessStatus.visibility = View.VISIBLE
                         lottieSuccessStatus.playAnimation()
 
