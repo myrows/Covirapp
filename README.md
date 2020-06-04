@@ -2,6 +2,12 @@
 
 Aplicación móvil creada sobre lenguaje Kotlin , esta app del Covid-19 proporciona información de varias fuentes oficiales con datos de interés, consume también de una Api creada en Kotlin con el IDE Intellij IDEA y entres sus funciones , la más destacada es la detección de mascarilla en el rostro facial gracias al aprendizaje automático de AutoML
 
+<a href="https://ibb.co/9VMmMWJ"><img src="https://i.ibb.co/0Fwpwrk/detector-Mask.png" alt="detector-Mask" border="0" width="200"></a>
+<a href="https://ibb.co/kgNWrpS"><img src="https://i.ibb.co/PZqfbR6/Paises-Data.png" alt="Paises-Data" border="0" width="200"></a>
+<a href="https://ibb.co/TPXpvn4"><img src="https://i.ibb.co/RQnZvM3/Paises-Listado.png" alt="Paises-Listado" border="0" width="200"></a>
+<a href="https://ibb.co/XVyCbfr"><img src="https://i.ibb.co/vDsjHC6/Radar.png" alt="Radar" border="0" width="200"></a>
+<a href="https://ibb.co/6HtSMyD"><img src="https://i.ibb.co/v3dWFcL/users-Listado.png" alt="users-Listado" border="0" width="200"></a>
+
 ## ¿Cómo puedo probarla?
 
 Importe en Android Studio la aplicación localizada en Covirap-app
