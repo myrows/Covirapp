@@ -30,8 +30,8 @@ class SetupUserDataTask(
         val adminRole = createRoleIfNotFound("ROLE_ADMIN", hashSetOf(readPermission, writePermission))
         val userRole = createRoleIfNotFound("ROLE_USER", hashSetOf(readPermission))
 
-        createUserIfNotFound("user1", "abcd1234", "ashdgj", "Jaén", Status.SALUDABLE,  hashSetOf(adminRole, userRole))
-        createUserIfNotFound("user2", "12345678", "ashdgj", "Barcelona", Status.SALUDABLE, hashSetOf(userRole))
+        createUserIfNotFound("usuario", "12345678", "ashdgj", "Jaén", Status.SALUDABLE,  hashSetOf(adminRole, userRole), "photo-1546539782-6fc531453083.jpeg")
+        createUserIfNotFound("user2", "12345678", "ashdgj", "Barcelona", Status.SALUDABLE, hashSetOf(userRole), "photo-1520813792240-56fc4a3765a7.jpeg")
     }
 
     fun createPermissionIfNotFound(name: String): Permission {
@@ -52,8 +52,8 @@ class SetupUserDataTask(
     }
 
 
-    fun createUserIfNotFound(username: String, password: String, fullName : String, province : String, status : Status, roles: Set<Role>): User {
-        val user = User(username = username, password = password, fullName = fullName, province = province, status = status, roles = roles)
+    fun createUserIfNotFound(username: String, password: String, fullName : String, province : String, status : Status, roles: Set<Role>, avatar : String ): User {
+        val user = User(username = username, password = password, fullName = fullName, province = province, status = status, roles = roles, avatar = avatar)
         var retrieval = userService.tryCreate(user)
         if (!retrieval.isPresent)
             retrieval = userService.findByUsername(username)

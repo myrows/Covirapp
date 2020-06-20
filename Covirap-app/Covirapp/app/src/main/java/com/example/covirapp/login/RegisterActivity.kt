@@ -73,6 +73,7 @@ class RegisterActivity : AppCompatActivity() {
         var pattern = "HH:mm:ss.SSS"
         var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
         var date: String = simpleDateFormat.format(Date())
+        var numRandom : Int = (1..9999).random()
 
         textIniciarSesion = findViewById(R.id.textViewIniciarSesion)
         btnRegister = findViewById(R.id.buttonRegister)
@@ -116,7 +117,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         val requestFile: RequestBody = RequestBody.create(getContentResolver().getType(uriSelected!!)?.toMediaTypeOrNull(), file)
 
-                        val body: MultipartBody.Part = MultipartBody.Part.createFormData("uploadfile", "$date$originalFileName", requestFile)
+                        val body: MultipartBody.Part = MultipartBody.Part.createFormData("uploadfile", "$numRandom$originalFileName", requestFile)
 
                         val username: RequestBody = RequestBody.create(MultipartBody.FORM, edtName.getText().toString())
 
